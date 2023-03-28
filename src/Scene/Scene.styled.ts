@@ -1,17 +1,12 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  z-index: 1;
-  position: fixed;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
-export const ButtonsWrapper = styled.div`
-  position: absolute;
-  bottom: 0;
-  border: 10px solid blue;
-  z-index: 2;
-  height: 10%;
+export const SceneContainer = styled.div`
   width: 100%;
-  box-sizing: border-box;
-  background-color: pink;
+  height: 100%;
 `;

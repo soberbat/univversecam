@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { ButtonsWrapper, Container } from "./Scene.styled";
+import { Container, SceneContainer } from "./Scene.styled";
 import { Scene } from "./class/Scene";
+import Footer from "../components/Footer/Footer";
+import Header from "../components/Header/Header";
 
 const Environment = () => {
   const rendererWrapper = useRef<HTMLDivElement | null>(null);
@@ -20,14 +22,14 @@ const Environment = () => {
 
   const releaseControls = () => {
     scene.current?.releaseControls();
-    console.log("clicked");
   };
 
   return (
-    <>
-      <Container ref={rendererWrapper}></Container>
-      {/* <ButtonsWrapper onClick={() => releaseControls()}></ButtonsWrapper> */}
-    </>
+    <Container>
+      <SceneContainer ref={rendererWrapper}></SceneContainer>
+      <Header></Header>
+      <Footer></Footer>
+    </Container>
   );
 };
 

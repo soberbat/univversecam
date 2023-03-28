@@ -230,7 +230,6 @@ export class Scene {
       map: particleTexture,
       transparent: true,
       size: 0.3,
-      sizeAttenuation: true,
     });
 
     const stars = new THREE.Points(particlesGeometry, particlesMaterial);

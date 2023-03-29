@@ -4,7 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as TWEEN from "@tweenjs/tween.js";
 import { Object3D, Vector3 } from "three";
 
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import * as MeshLine from "three.meshline";
 
 interface SceneProps {
   rendererContainer: any;
@@ -29,8 +29,14 @@ export class Scene {
   mars: any;
   world: THREE.Object3D;
 
+  points: any;
+  line: any;
+
   isSelected: boolean;
   selectedPlanet: any;
+
+  isCameraMovingFree: boolean;
+  canCameraMove: boolean;
 
   lockAnimation: TWEEN.Tween<any>;
   lockAnimation2: TWEEN.Tween<any>;
@@ -53,10 +59,12 @@ export class Scene {
     this.cameraGroup = new THREE.Group();
     this.ratio = window.innerWidth / window.innerHeight;
     this.camera = new THREE.PerspectiveCamera(45, this.ratio);
-    this.camera.position.z = -4;
-    this.camera.position.y = 4;
+
+    this.camera.position.z = 4;
+    this.camera.position.y = 40;
     this.cameraGroup.add(this.camera);
     this.camera.lookAt(0, 0, 0);
+    this.camera.fov = 40;
     this.scene.add(this.cameraGroup);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -64,9 +72,11 @@ export class Scene {
     this.controls.enableZoom = false;
     this.controls.maxPolarAngle = Math.PI / 2;
     this.controls.minPolarAngle = 1;
+
     this.controls.update();
 
     this.planets = [];
+    this.points = [];
 
     this.world = new THREE.Object3D();
     const pLight1 = new THREE.SpotLight(0x133fff);
@@ -88,6 +98,8 @@ export class Scene {
 
     this.clock = new THREE.Clock();
     this.isSelected = false;
+    this.isCameraMovingFree = true;
+    this.canCameraMove = true;
   }
 
   init = async () => {
@@ -100,6 +112,85 @@ export class Scene {
     this.rendererContainer.addEventListener("mousedown", (e) =>
       this.raycasterListener(e)
     );
+  };
+
+  raycasterListener = (e: MouseEvent) => {
+    const X = e.clientX;
+    const Y = e.clientY;
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    mouse.x = (X / window.innerWidth) * 2 - 1;
+    mouse.y = -(Y / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, this.camera);
+
+    const intersect = raycaster.intersectObjects(this.planets, true)[0]
+      ?.object as any;
+
+    if (intersect) {
+      const selectedPlanet = this.getTraversedItem(intersect);
+
+      if (this.isSelected) {
+        this.selectedPlanet = selectedPlanet;
+        this.animateAreaLight(selectedPlanet);
+        //    this.lockAnimation.stop();
+      }
+    } else {
+      this.isSelected && this.releaseControls();
+      this.isSelected = false;
+    }
+  };
+
+  getTraversedItem = (intersect: any) => {
+    let traversed;
+
+    intersect.traverseAncestors((intersectionObj: any) => {
+      if (intersectionObj.isPlanet === true) {
+        traversed = intersectionObj;
+        this.isSelected = true;
+        return;
+      }
+    });
+
+    return traversed ? traversed : (this.isSelected = false);
+  };
+
+  randomIntFromInterval = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  animate = () => {
+    this.renderer.render(this.scene, this.camera);
+
+    TWEEN.update();
+    this.controls.update();
+
+    //this.freeMoveCamera();
+
+    this.frame = requestAnimationFrame(this.animate.bind(this));
+
+    this.planets.forEach((planet: THREE.Object3D, i: number) => {
+      (planet as Object3D).position.set(
+        Math.sin(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 5,
+        0,
+        Math.cos(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 5
+      );
+    });
+
+    this.isSelected && this.focusPlanet(this.selectedPlanet.position);
+
+    //    this.canCameraMove && this.isCameraMovingFree && this.moveCamera();
+  };
+
+  moveCamera = () => {
+    this.isCameraMovingFree = false;
+
+    const randX = this.randomIntFromInterval(-10, 10);
+    const randY = this.randomIntFromInterval(39, 41);
+    const randZ = this.randomIntFromInterval(4, 6);
+
+    this.animateControls({ x: randX, y: randY, z: randZ }, {}, true, 8000);
   };
 
   loadObjects = () => {
@@ -137,76 +228,6 @@ export class Scene {
 
     const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.7);
     this.scene.add(light);
-  };
-
-  gridHelper = () => {
-    const size = 10;
-    const divisions = 10;
-    const gridHelper = new THREE.GridHelper(size, divisions);
-    gridHelper.position.set(0, 0.5, 0);
-    this.scene.add(gridHelper);
-  };
-
-  raycasterListener = (e: MouseEvent) => {
-    const X = e.clientX;
-    const Y = e.clientY;
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    mouse.x = (X / window.innerWidth) * 2 - 1;
-    mouse.y = -(Y / window.innerHeight) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, this.camera);
-
-    const intersect = raycaster.intersectObjects(this.planets, true)[0]
-      ?.object as any;
-
-    if (intersect) {
-      const selectedPlanet = this.getTraversedItem(intersect);
-
-      if (this.isSelected) {
-        this.selectedPlanet = selectedPlanet;
-        this.animateAreaLight(selectedPlanet);
-      }
-    } else {
-      this.isSelected && this.releaseControls();
-      this.isSelected = false;
-    }
-  };
-
-  getTraversedItem = (intersect: any) => {
-    let traversed;
-
-    intersect.traverseAncestors((intersectionObj: any) => {
-      if (intersectionObj.isPlanet === true) {
-        traversed = intersectionObj;
-        this.isSelected = true;
-        return;
-      }
-    });
-
-    return traversed ? traversed : (this.isSelected = false);
-  };
-
-  animate = () => {
-    this.renderer.render(this.scene, this.camera);
-
-    TWEEN.update();
-    this.controls.update();
-
-    this.frame = requestAnimationFrame(this.animate.bind(this));
-
-    this.planets.forEach((planet: THREE.Object3D, i: number) => {
-      (planet as Object3D).position.set(
-        Math.sin(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 5,
-        0,
-        Math.cos(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 5
-      );
-    });
-
-    if (this.isSelected) {
-      this.focusPlanet(this.selectedPlanet.position);
-    }
   };
 
   addStars = () => {
@@ -258,28 +279,65 @@ export class Scene {
 
   releaseControls = () => {
     TWEEN.removeAll();
-    this.animateControls({ x: 0, y: 40, z: 4 }, { x: 0, y: 0, z: 0 });
+    this.animateControls({ x: 0, y: 40, z: 0 }, { x: 0, y: 0, z: 0 });
   };
 
-  animateControls = (camera: any, controls: any) => {
+  changeCamera = (is3D: boolean) => {
+    this.controls.maxPolarAngle = Math.PI;
+    this.controls.minPolarAngle = 0;
+
+    this.controls.update();
+
+    this.animateControls({ x: 0, y: 40, z: 0 }, { x: 0, y: 0, z: 0 }, true);
+  };
+
+  change3d = () => {
+    this.controls.maxPolarAngle = Math.PI;
+    this.controls.minPolarAngle = 0;
+
+    this.controls.update();
+
+    this.animateControls({ x: 0, y: 3, z: 30 }, { x: 0, y: 0, z: 0 }, false);
+  };
+
+  animateControls = (
+    camera: any,
+    controls?: any,
+    isFreeMovement?: boolean,
+    duration?: number
+  ) => {
     const cameraTween = new TWEEN.Tween(this.camera.position)
       .to(camera)
-      .duration(1600)
-      .easing(TWEEN.Easing.Circular.Out);
+      .duration(duration || 1600)
+      .easing(
+        isFreeMovement
+          ? TWEEN.Easing.Quadratic.InOut
+          : TWEEN.Easing.Circular.Out
+      )
+      .onComplete(() => {
+        isFreeMovement && (this.isCameraMovingFree = true);
+      });
 
     const controlsTween = new TWEEN.Tween(this.controls.target)
       .to(controls)
-      .duration(1000)
+      .duration(duration || 1600)
       .easing(TWEEN.Easing.Circular.Out)
       .onStart(() => {
         this.controls.enabled = false;
       })
       .onComplete(() => {
+        isFreeMovement && (this.controls.maxPolarAngle = 0);
+        //isFreeMovement && (this.controls.minPolarAngle = -Math.PI);
+
+        //  !isFreeMovement && (this.controls.maxPolarAngle = Math.PI / 2);
+        //!isFreeMovement && (this.controls.minPolarAngle = 1);
+        this.controls.update();
         this.controls.enabled = true;
+        this.controls.update();
       });
 
     controlsTween.start();
-    cameraTween.start();
+    this.lockAnimation = cameraTween.start();
   };
 
   focusPlanet = (position: any) => {

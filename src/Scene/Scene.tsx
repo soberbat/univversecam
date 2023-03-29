@@ -24,10 +24,14 @@ const Environment = () => {
     scene.current?.releaseControls();
   };
 
+  const changeCamera = (is3DCam: any) => {
+    scene.current?.changeCamera(is3DCam);
+  };
+
   return (
     <Container>
       <SceneContainer ref={rendererWrapper}></SceneContainer>
-      <Header></Header>
+      {/* <Header></Header> */}
       <Footer></Footer>
     </Container>
   );

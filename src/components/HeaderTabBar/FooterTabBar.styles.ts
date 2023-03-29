@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 export const Wrapper = styled.div`
   position: absolute;
   top: -35%;
-  right: 0;
+  right: -0.2%;
   width: 30%;
   height: 35%;
   display: flex;
@@ -14,13 +14,14 @@ export const Wrapper = styled.div`
 //#1c445a
 //#3bb2da
 export const ButtonWrapper = styled.div<{ activeTab: boolean }>(
-  ({ activeTab }) => css`
+  ({ activeTab, theme }) => css`
     height: ${activeTab ? "120%" : "100%"};
     width: 100%;
-    border-top: 1px solid #0d67a1;
-    border-right: 1px solid #0d67a1;
+    border-top: 1px solid ${theme.fadedBlue};
+    border-right: 1px solid ${theme.fadedBlue};
     background-color: black;
     align-self: flex-end;
+
     position: relative;
     flex: ${activeTab ? "0.9" : "1"};
 
@@ -44,10 +45,13 @@ export const ButtonWrapper = styled.div<{ activeTab: boolean }>(
 );
 
 export const SkewedView = styled.div<{ activeTab: boolean }>(
-  ({ activeTab }) => css`
+  ({ activeTab, theme }) => css`
     position: relative;
     width: 100%;
     height: 100%;
+      display: flex;
+    justify-content: center;
+    align-items: center;
 
     position: relative;
     background-color: black;
@@ -63,37 +67,42 @@ export const SkewedView = styled.div<{ activeTab: boolean }>(
       display: block;
       width: 4%;
       height: 104%;
-
       bottom: -1px;
       left: -2px;
-      color: #44edf7;
-      border-left: 1px solid ${activeTab ? "#44edf7" : "#0d67a1"};
-      background-color: ${activeTab ? "#44edf7" : "#0d67a1"};
+      color: ${theme.glowyBlue};
+      border-left: 1px solid
       z-index: 1;
+        ${activeTab ? `${theme.glowyBlue}` : `${theme.fadedBlue}`};
+
+      background-color: ${
+        activeTab ? `${theme.glowyBlue}` : `${theme.fadedBlue}`
+      };
       box-shadow: ${activeTab ? "0px 0px 20px 4px rgb(68, 237, 247, 0.4)" : ""};
     }
 
-    ${activeTab &&
-    css`
-      ::after {
-        content: " ";
-        position: absolute;
-        display: block;
-        width: 100%;
-        height: 2px;
-        bottom: -2px;
-        background-color: black;
-      }
-    `}
+    ${
+      activeTab &&
+      css`
+        ::after {
+          content: " ";
+          position: absolute;
+          display: block;
+          width: 100%;
+          height: 2px;
+          bottom: -2px;
+          background-color: black;
+        }
+      `
+    }
   `
 );
 
 export const TabItem = styled.span<{ activeTab: boolean }>(
-  ({ activeTab }) => css`
+  ({ activeTab, theme }) => css`
     transform: skew(43deg, 0);
     font-weight: 300;
     font-size: 0.6rem;
-    color: #0d67a1;
+    color: ${theme.fadedBlue};
     margin-top: 0.5rem;
 
     ${activeTab &&

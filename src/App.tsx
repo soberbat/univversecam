@@ -4,11 +4,17 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import Environment from "./Scene/Scene";
 import MainView from "./components/MainView/MainView";
+import AppContext from "./components/state/AppContext";
+import useApp from "./components/state/useApp";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const state = useApp();
 
-  return <MainView />;
+  return (
+    <AppContext.Provider value={state}>
+      <MainView />;
+    </AppContext.Provider>
+  );
 }
 
 export default App;

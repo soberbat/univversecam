@@ -16,8 +16,6 @@ export default [
   {
     child: "Large",
     description: "",
-    onClick: () => {
-      console.log("2d");
-    },
+    onClick: () => {},
   },
 ];

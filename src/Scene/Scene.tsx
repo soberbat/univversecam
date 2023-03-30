@@ -3,36 +3,37 @@ import { Container, SceneContainer } from "./Scene.styled";
 import { Scene } from "./class/Scene";
 import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
+import AppContext from "../components/state/AppContext";
 
 const Environment = () => {
   const rendererWrapper = useRef<HTMLDivElement | null>(null);
-  const scene = useRef<Scene | null>(null);
+
+  const { sceneRef } = useContext(AppContext);
 
   useEffect(() => {
-    !scene.current &&
+    !sceneRef.current &&
       (async () => {
-        scene.current = new Scene({
+        sceneRef.current = new Scene({
           rendererContainer: rendererWrapper.current,
         });
-
-        await scene.current.init();
-        scene.current.animate();
+        await sceneRef.current.init();
+        sceneRef.current.animate();
       })();
   }, []);
 
   const releaseControls = () => {
-    scene.current?.releaseControls();
+    sceneRef.current?.releaseControls();
   };
 
   const changeCamera = (is3DCam: any) => {
-    scene.current?.changeCamera(is3DCam);
+    sceneRef.current?.changeCamera(is3DCam);
   };
 
   return (
     <Container>
       <SceneContainer ref={rendererWrapper}></SceneContainer>
-      {/* <Header></Header> */}
-      <Footer></Footer>
+      <Header />
+      <Footer />
     </Container>
   );
 };

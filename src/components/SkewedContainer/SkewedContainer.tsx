@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { InnerWrapper, Wrapper, Image } from "./SkewedContainer.styles";
 
 interface ISkewedContainer {

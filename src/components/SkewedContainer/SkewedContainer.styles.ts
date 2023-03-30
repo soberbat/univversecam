@@ -1,8 +1,9 @@
 import styled, { css } from "styled-components";
 
 export interface IWrapper {
-  isActive: boolean;
+  isActive?: boolean;
   disabled?: boolean;
+  isInputField?: boolean;
 }
 
 export const Wrapper = styled.div<IWrapper>(

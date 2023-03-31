@@ -2,16 +2,12 @@ const cameraData = [
   {
     child: "3D",
     description: "3D",
-    onClick: () => {
-      console.log("3d");
-    },
+    onClick: (scene: any) => scene.current.set3dCamera(),
   },
   {
     child: "2D",
     description: "2D",
-    onClick: () => {
-      console.log("2d");
-    },
+    onClick: (scene: any) => scene.current.set2dCamera(),
   },
 ];
 
@@ -67,43 +63,43 @@ const factions = [
   {
     child: "/icons/gemini.png",
     description: "Banu",
-    onClick: () => {
-      console.log("3d");
+    onClick: (scene: any) => {
+      scene.current.animateFactionVisibility("banu");
     },
   },
   {
     child: "/icons/capricorn.png",
     description: "Menx",
-    onClick: () => {
-      console.log("3d");
+    onClick: (scene: any) => {
+      scene.current.animateFactionVisibility("menx");
     },
   },
   {
     child: "/icons/libra.png",
     description: "Septor",
-    onClick: () => {
-      console.log("2d");
+    onClick: (scene: any) => {
+      scene.current.animateFactionVisibility("septor");
     },
   },
   {
     child: "/icons/sagittarius.png",
     description: "Namst'x",
-    onClick: () => {
-      console.log("3d");
+    onClick: (scene: any) => {
+      scene.current.animateFactionVisibility("namsxt");
     },
   },
   {
     child: "/icons/virgo.png",
     description: "KA",
-    onClick: () => {
-      console.log("3d");
+    onClick: (scene: any) => {
+      scene.current.animateFactionVisibility("ka");
     },
   },
   {
     child: "/icons/aquarius.png",
     description: "PX23T",
-    onClick: () => {
-      console.log("2d");
+    onClick: (scene: any) => {
+      scene.current.animateFactionVisibility("px23t");
     },
   },
 ];

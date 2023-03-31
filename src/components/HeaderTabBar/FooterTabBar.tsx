@@ -11,7 +11,7 @@ interface IFooterTabBar {
 }
 export default function FooterTabBar({ changeCurrentTab }: IFooterTabBar) {
   const tabItems = ["SEARCH", "BOOKMARKS", "ROUTES", "DİSPLAY"];
-  const [activeTab, setactiveTab] = useState<number>(1);
+  const [activeTab, setactiveTab] = useState<number>(4);
   const handleTabClick = (i: number, tab: string) => {
     setactiveTab(i);
     changeCurrentTab(tab);

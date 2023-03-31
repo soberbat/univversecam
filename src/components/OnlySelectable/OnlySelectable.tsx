@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SkewedContainer from "../SkewedContainer/SkewedContainer";
 import {
   OnlySelectableSlot,
@@ -8,10 +8,12 @@ import {
   SelectedCategory,
   NameWrapper,
 } from "./OnlySelectable.styles";
+import useApp from "../state/useApp";
+import AppContext from "../state/AppContext";
 
 interface Selectable {
   data: {
-    onClick: () => void;
+    onClick: (scene: any) => void;
     description: string;
     child: any;
   }[];
@@ -30,9 +32,10 @@ const Selectable = ({
   const [hoveredSection, setHoveredSection] = useState("");
   const [isHovered, setisHovered] = useState(Boolean);
   const [selectedSection, setSelectedSection] = useState("");
+  const { sceneRef } = useContext(AppContext);
 
   const renderSingularSelectionButtons = (
-    onClick: () => void,
+    onClick: (sceneRef: any) => void,
     child: any,
     description: string,
     i: number
@@ -40,8 +43,8 @@ const Selectable = ({
     <SkewedContainer
       isChildImage={isChildImage}
       canSelectMultiple={false}
-      onClick={() => {
-        onClick();
+      onClick={(sceneRef) => {
+        onClick(sceneRef);
         setActiveSlot(i);
         setSelectedSection(`/ ${description}`);
       }}
@@ -70,7 +73,7 @@ const Selectable = ({
                   isChildImage={isChildImage}
                   canSelectMultiple={true}
                   onClick={() => {
-                    onClick();
+                    onClick(sceneRef);
                     setSelectedSection(`/ ${description}`);
                   }}
                 >

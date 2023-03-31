@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { InnerWrapper, Wrapper, Image } from "./SkewedContainer.styles";
+import AppContext from "../state/AppContext";
 
 interface ISkewedContainer {
   children: any;
   canSelectMultiple?: boolean;
   isActiveSlot?: boolean;
   isChildImage: boolean;
-  onClick?: () => void;
+  onClick?: (scene: any) => void;
 }
 const SkewedContainer = ({
   children,
@@ -17,10 +18,11 @@ const SkewedContainer = ({
   isChildImage,
 }: ISkewedContainer) => {
   const [isActive, setisActive] = useState(false);
+  const { sceneRef } = useContext(AppContext);
 
   const selectSlot = () => {
     canSelectMultiple && setisActive(!isActive);
-    onClick && onClick();
+    onClick && onClick(sceneRef);
   };
   return (
     <Wrapper isActive={isActiveSlot || isActive} onClick={selectSlot}>

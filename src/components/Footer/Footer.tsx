@@ -4,7 +4,7 @@ import FooterTabBar from "../HeaderTabBar/FooterTabBar";
 import { InnerWrapper, Wrapper } from "./Footer.styles";
 
 export default function Footer() {
-  const [currentTab, setcurrentTab] = useState("routesTab");
+  const [currentTab, setcurrentTab] = useState("displayTab");
 
   const changeCurrentTab = (tab: string) => {
     switch (tab) {

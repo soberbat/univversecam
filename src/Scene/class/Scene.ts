@@ -1,11 +1,11 @@
+import * as MeshLine from "three.meshline";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import { LottieLoader } from "three/examples/jsm/loaders/LottieLoader";
 import * as TWEEN from "@tweenjs/tween.js";
 import { Object3D, Vector3 } from "three";
-
-import * as MeshLine from "three.meshline";
 
 interface SceneProps {
   rendererContainer: any;
@@ -27,8 +27,10 @@ export class Scene {
   cameraGroup: any;
 
   planets: any;
-  mars: any;
   world: THREE.Object3D;
+
+  factions: any;
+  fanctionObj: any;
 
   points: any;
   line: any;
@@ -53,6 +55,7 @@ export class Scene {
       alpha: true,
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
 
     this.scene = new THREE.Scene();
     this.scene.background = "0x000000";
@@ -61,8 +64,8 @@ export class Scene {
     this.ratio = window.innerWidth / window.innerHeight;
     this.camera = new THREE.PerspectiveCamera(45, this.ratio);
 
-    this.camera.position.z = 4;
-    this.camera.position.y = 40;
+    this.camera.position.z = 20;
+    this.camera.position.y = 20;
     this.cameraGroup.add(this.camera);
     this.camera.lookAt(0, 0, 0);
     this.camera.fov = 40;
@@ -71,29 +74,15 @@ export class Scene {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.enableZoom = false;
-    this.controls.maxPolarAngle = Math.PI / 2;
-    this.controls.minPolarAngle = 1;
 
     this.controls.update();
 
     this.planets = [];
     this.points = [];
+    this.factions = [];
+    this.fanctionObj = [];
 
     this.world = new THREE.Object3D();
-    const pLight1 = new THREE.SpotLight(0x133fff);
-    pLight1.position.set(0, 20, 0);
-    const width = 5;
-    const height = 5;
-    const intensity = 0;
-    const rectLight = new THREE.RectAreaLight(
-      0xffd700,
-      intensity,
-      width,
-      height
-    );
-    rectLight.position.set(0, -5, 0);
-    rectLight.lookAt(0, 0, 0);
-    this.world.add(rectLight);
     this.world.name = "world";
     (this.world as any).isPlanet = true;
 
@@ -106,9 +95,8 @@ export class Scene {
   init = async () => {
     await this.loadObjects();
     await this.initLights();
-
+    this.addSprites();
     this.addStars();
-    this.rotatePlanet();
 
     this.rendererContainer.addEventListener("mousedown", (e) =>
       this.raycasterListener(e)
@@ -255,6 +243,7 @@ export class Scene {
     });
 
     const stars = new THREE.Points(particlesGeometry, particlesMaterial);
+
     this.scene.add(stars);
   };
 
@@ -268,37 +257,68 @@ export class Scene {
     areaLightVisibility.start();
   };
 
-  rotatePlanet = () => {
-    const model = new TWEEN.Tween(this.world.rotation)
-      .to({ y: 360 })
-      .duration(30000000)
-      .repeat(99)
-      .easing(TWEEN.Easing.Circular.Out);
+  addSprites = () => {
+    const loader = new LottieLoader();
+    loader.load("lotties/pulsee.json", (texture) => {});
+    const path = "/icons/stars/star-";
+    const factionMaps = [
+      new THREE.TextureLoader().load(path + "01.png"),
+      new THREE.TextureLoader().load(path + "02.png"),
+      new THREE.TextureLoader().load(path + "03.png"),
+      new THREE.TextureLoader().load(path + "04.png"),
+      new THREE.TextureLoader().load(path + "05.png"),
+      new THREE.TextureLoader().load(path + "06.png"),
+    ];
 
-    model.start();
+    factionMaps.forEach((map: any, i: number) => {
+      this.factions.push(new THREE.SpriteMaterial({ map: map, opacity: 0.3 }));
+    });
+
+    this.factions.forEach((material) => {
+      const randomNum = this.randomIntFromInterval(5, 15);
+
+      for (let i = 0; i < randomNum; i++) {
+        const sprite = new THREE.Sprite(material);
+
+        sprite.scale.set(0.6, 0.6, 0.6);
+        sprite.position.set(
+          this.randomIntFromInterval(-20, 20),
+          this.randomIntFromInterval(-10, 10),
+          this.randomIntFromInterval(-20, 10)
+        );
+        this.scene.add(sprite);
+      }
+    });
+
+    this.fanctionObj = {
+      banu: { material: this.factions[0], isVisible: true },
+      menx: { material: this.factions[1], isVisible: true },
+      septor: { material: this.factions[2], isVisible: true },
+      namsxt: { material: this.factions[3], isVisible: true },
+      ka: { material: this.factions[4], isVisible: true },
+      px23t: { material: this.factions[5], isVisible: true },
+    };
+  };
+
+  animateFactionVisibility = (faction: string) => {
+    const { material, isVisible } = this.fanctionObj[faction];
+
+    const hotspotVisibility = new TWEEN.Tween({
+      opacity: isVisible ? 0.3 : 1,
+    })
+      .to({ opacity: isVisible ? 1 : 0.3 }, 1000)
+      .onStart(() => {})
+      .onComplete(() => {
+        this.fanctionObj[faction].isVisible = !isVisible;
+      })
+      .onUpdate((tween) => (material.opacity = tween.opacity));
+
+    hotspotVisibility.start();
   };
 
   releaseControls = () => {
     TWEEN.removeAll();
-    this.animateControls({ x: 0, y: 40, z: 0 }, { x: 0, y: 0, z: 0 });
-  };
-
-  changeCamera = (is3D: boolean) => {
-    this.controls.maxPolarAngle = Math.PI;
-    this.controls.minPolarAngle = 0;
-
-    this.controls.update();
-
-    this.animateControls({ x: 0, y: 40, z: 0 }, { x: 0, y: 0, z: 0 }, true);
-  };
-
-  change3d = () => {
-    this.controls.maxPolarAngle = Math.PI;
-    this.controls.minPolarAngle = 0;
-
-    this.controls.update();
-
-    this.animateControls({ x: 0, y: 3, z: 30 }, { x: 0, y: 0, z: 0 }, false);
+    this.animateControls({ x: 0, y: 20, z: 20 }, { x: 0, y: 0, z: 0 });
   };
 
   animateControls = (
@@ -309,36 +329,51 @@ export class Scene {
   ) => {
     const cameraTween = new TWEEN.Tween(this.camera.position)
       .to(camera)
-      .duration(duration || 1600)
-      .easing(
-        isFreeMovement
-          ? TWEEN.Easing.Quadratic.InOut
-          : TWEEN.Easing.Circular.Out
-      )
-      .onComplete(() => {
-        isFreeMovement && (this.isCameraMovingFree = true);
-      });
+      .duration(700)
+      .easing(TWEEN.Easing.Circular.Out);
 
     const controlsTween = new TWEEN.Tween(this.controls.target)
       .to(controls)
-      .duration(duration || 1600)
+      .duration(700)
       .easing(TWEEN.Easing.Circular.Out)
       .onStart(() => {
         this.controls.enabled = false;
+        this.controls.update();
       })
       .onComplete(() => {
-        isFreeMovement && (this.controls.maxPolarAngle = 0);
-        //isFreeMovement && (this.controls.minPolarAngle = -Math.PI);
+        this.controls.enabled = true;
+      });
 
-        //  !isFreeMovement && (this.controls.maxPolarAngle = Math.PI / 2);
-        //!isFreeMovement && (this.controls.minPolarAngle = 1);
-        this.controls.update();
+    cameraTween.start();
+    controlsTween.start();
+  };
+
+  set2dCamera = () => {
+    this.controls.enabled = false;
+    this.controls.maxPolarAngle = Math.PI;
+    this.controls.minPolarAngle = 0;
+    this.controls.target.set(0, 0, 0);
+    this.controls.update();
+    const cameraTween = new TWEEN.Tween(this.camera.position)
+      .to({ x: 0, y: 40, z: 2 })
+      .duration(1000)
+      .easing(TWEEN.Easing.Exponential.Out);
+    cameraTween.start();
+  };
+
+  set3dCamera = () => {
+    const cameraTween = new TWEEN.Tween(this.camera.position)
+      .to({ x: 0, y: 20, z: 20 })
+      .duration(1000)
+      .easing(TWEEN.Easing.Exponential.Out)
+      .onComplete(() => {
+        this.controls.target.set(0, 0, 0);
+        this.controls.maxPolarAngle = Math.PI;
+        this.controls.minPolarAngle = 0;
         this.controls.enabled = true;
         this.controls.update();
       });
-
-    controlsTween.start();
-    this.lockAnimation = cameraTween.start();
+    cameraTween.start();
   };
 
   focusPlanet = (position: any) => {

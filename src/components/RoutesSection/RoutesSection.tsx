@@ -29,7 +29,6 @@ export default function RoutesSection() {
 
       <SearchBarsWrapper>
         <SearchBar />
-        <SearchBar />
       </SearchBarsWrapper>
     </RoutesWrapper>
   );

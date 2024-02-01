@@ -1,7 +1,8 @@
 import React, { createContext } from "react";
+import { Scene } from "../../Scene/class/Scene";
 
 export interface IState {
-  sceneRef: any;
+  sceneRef: React.MutableRefObject<Scene> | null;
 }
 
 export const State = {

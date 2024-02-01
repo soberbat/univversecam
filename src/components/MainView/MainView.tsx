@@ -4,7 +4,7 @@ import { Wrapper } from "./MainView.styles";
 export default function MainView() {
   return (
     <Wrapper>
-      <Environment></Environment>
+      <Environment />
     </Wrapper>
   );
 }

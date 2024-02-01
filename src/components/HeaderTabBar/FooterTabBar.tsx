@@ -10,8 +10,8 @@ interface IFooterTabBar {
   changeCurrentTab: (tab: string) => void;
 }
 export default function FooterTabBar({ changeCurrentTab }: IFooterTabBar) {
-  const tabItems = ["SEARCH", "BOOKMARKS", "ROUTES", "DİSPLAY"];
-  const [activeTab, setactiveTab] = useState<number>(4);
+  const [activeTab, setactiveTab] = useState<number>(1);
+  const tabItems = ["Search", "Display"];
   const handleTabClick = (i: number, tab: string) => {
     setactiveTab(i);
     changeCurrentTab(tab);
@@ -19,15 +19,15 @@ export default function FooterTabBar({ changeCurrentTab }: IFooterTabBar) {
 
   return (
     <Wrapper>
-      {tabItems.map((tabItem, i) => {
+      {tabItems.map((tabName, i) => {
         const isActive = i === activeTab;
         return (
           <ButtonWrapper
-            onClick={() => handleTabClick(i, tabItem)}
+            onClick={() => handleTabClick(i, tabName)}
             activeTab={isActive}
           >
             <SkewedView activeTab={isActive}>
-              <TabItem activeTab={isActive}>{tabItem}</TabItem>
+              <TabItem activeTab={isActive}>{tabName.toUpperCase()}</TabItem>
             </SkewedView>
           </ButtonWrapper>
         );

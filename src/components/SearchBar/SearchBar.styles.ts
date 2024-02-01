@@ -63,5 +63,6 @@ export const SearchIcon = styled.img.attrs({ src: "/icons/search.svg" })`
   z-index: 3;
   top: 50%;
   right: 0%;
+
   transform: translate(-50%, -50%);
 `;

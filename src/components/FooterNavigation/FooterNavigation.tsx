@@ -14,8 +14,6 @@ interface ITabs {
 export default function FooterNavigation({ currentTab }: IFooterNavigation) {
   const Tabs: ITabs = {
     ["displayTab"]: <DisplaySection />,
-    ["routesTab"]: <RoutesSection />,
-    ["bookmarksTab"]: <RoutesSection />,
     ["searchTab"]: <RoutesSection />,
   };
   return (

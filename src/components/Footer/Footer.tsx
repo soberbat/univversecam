@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FooterNavigation from "../FooterNavigation/FooterNavigation";
 import FooterTabBar from "../HeaderTabBar/FooterTabBar";
 import { InnerWrapper, Wrapper } from "./Footer.styles";
+import Sensors from "../Sensors/Sensors";
 
 export default function Footer() {
   const [currentTab, setcurrentTab] = useState("displayTab");
@@ -11,13 +12,7 @@ export default function Footer() {
       case "Search":
         setcurrentTab("searchTab");
         break;
-      case "BOOKMARKS":
-        setcurrentTab("bookmarksTab");
-        break;
-      case "ROUTES":
-        setcurrentTab("routesTab");
-        break;
-      case "DİSPLAY":
+      case "Display":
         setcurrentTab("displayTab");
         break;
     }
@@ -27,6 +22,7 @@ export default function Footer() {
       <InnerWrapper>
         <FooterTabBar changeCurrentTab={changeCurrentTab} />
         <FooterNavigation currentTab={currentTab} />
+        <Sensors />
       </InnerWrapper>
     </Wrapper>
   );

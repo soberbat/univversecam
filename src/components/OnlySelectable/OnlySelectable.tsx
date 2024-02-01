@@ -28,7 +28,7 @@ const Selectable = ({
   selectionCategory,
   isChildImage,
 }: Selectable) => {
-  const [activeSlot, setActiveSlot] = useState<number | null>(null);
+  const [activeSlot, setActiveSlot] = useState<number | null>(0);
   const [hoveredSection, setHoveredSection] = useState("");
   const [isHovered, setisHovered] = useState(Boolean);
   const [selectedSection, setSelectedSection] = useState("");

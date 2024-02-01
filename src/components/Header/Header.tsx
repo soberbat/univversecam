@@ -6,7 +6,7 @@ import {
   SkewedTabReverse,
   SkewedTabsWrapper,
   CenterView,
-  TabInner,
+  BlackTop,
 } from "./Header.styles";
 
 export default function Header() {
@@ -14,6 +14,7 @@ export default function Header() {
 
   return (
     <Wrapper>
+      <BlackTop />
       <SkewedTabsWrapper>
         <SkewedTab></SkewedTab>
         <CenterView />

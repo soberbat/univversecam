@@ -11,8 +11,11 @@ export const Wrapper = styled.div`
 
   inset: 0;
   top: 0;
+`;
 
-  padding-top: 0.5rem;
+export const BlackTop = styled.div`
+  background-color: black;
+  height: 0.5rem;
 `;
 
 export const SkewedTabsWrapper = styled.div`
@@ -28,7 +31,8 @@ export const SkewedTab = styled.div`
   background-color: black;
   border-right: 3px solid ${({ theme }) => theme.fadedBlue};
   border-bottom: 2px solid ${({ theme }) => theme.fadedBlue};
-  flex: 0.07;
+  flex: 0.08;
+  margin-left: -1rem;
 `;
 
 export const CenterView = styled.div`
@@ -39,6 +43,8 @@ export const CenterView = styled.div`
 
 export const SkewedTabReverse = styled(SkewedTab)<{ isSoundOn: boolean }>`
   transform: skew(30deg);
+  margin-left: unset;
+  margin-right: -1rem;
   border-right: none;
   border-left: 3px solid ${({ theme }) => theme.fadedBlue};
   transition: all ease-in 0.1s;

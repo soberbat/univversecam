@@ -13,21 +13,21 @@ const cameraData = [
 
 const sensorData = [
   {
-    child: "/icons/wish-list.png",
+    child: "/icons/radioactive.svg",
     description: "Threat",
     onClick: () => {
       console.log("3d");
     },
   },
   {
-    child: "/icons/process.png",
+    child: "/icons/people-fill.svg",
     description: "Population",
     onClick: () => {
       console.log("3d");
     },
   },
   {
-    child: "public/icons/record.png",
+    child: "public/icons/cash.svg",
     description: "Economy",
     onClick: () => {
       console.log("2d");

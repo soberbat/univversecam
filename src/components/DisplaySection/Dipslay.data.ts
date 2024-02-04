@@ -1,37 +1,113 @@
-const cameraData = [
+import { Scene } from "three";
+import {
+  SceneRef,
+  setCamera,
+  setFactionVisibility,
+  setSensorVisibility,
+} from "../../types/appTypes";
+
+const cameraConfig = [
   {
     child: "3D",
     description: "3D",
-    onClick: (scene: any) => scene.current.set3dCamera(),
+    onClick: (sceneRef: SceneRef, setState: setCamera) => {
+      sceneRef!.current.set3dCamera();
+      setState({ "2D": false, "3D": true });
+    },
+    isSlotActive: true,
   },
   {
     child: "2D",
     description: "2D",
-    onClick: (scene: any) => scene.current.set2dCamera(),
+    onClick: (sceneRef: SceneRef, setState: setCamera) => {
+      sceneRef!.current.set2dCamera();
+      setState({ "2D": true, "3D": false });
+    },
+    isSlotActive: false,
   },
 ];
 
-const sensorData = [
+const sensorConfig = [
   {
     child: "/icons/radioactive.svg",
-    description: "Threat",
-    onClick: () => {
-      console.log("3d");
+    description: "threat",
+    onClick: (setState: setSensorVisibility) => {
+      setState((prev) => ({ ...prev, threat: !prev.threat }));
     },
+    isSlotActive: false,
   },
   {
     child: "/icons/people-fill.svg",
-    description: "Population",
-    onClick: () => {
-      console.log("3d");
+    description: "population",
+    onClick: (setState: setSensorVisibility) => {
+      setState((prev) => ({ ...prev, population: !prev.population }));
     },
+    isSlotActive: false,
   },
   {
     child: "public/icons/cash.svg",
-    description: "Economy",
-    onClick: () => {
-      console.log("2d");
+    description: "economy",
+    onClick: (setState: setSensorVisibility) => {
+      setState((prev) => ({ ...prev, economy: !prev.economy }));
     },
+    isSlotActive: false,
+  },
+];
+
+const factionConfig = [
+  {
+    child: "/icons/gemini.png",
+    description: "banu",
+    onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
+      sceneRef!.current.animateFactionVisibility("banu");
+      setState((prev) => ({ ...prev, banu: !prev.banu }));
+    },
+    isSlotActive: false,
+  },
+  {
+    child: "/icons/capricorn.png",
+    description: "menx",
+    onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
+      sceneRef!.current.animateFactionVisibility("menx");
+      setState((prev) => ({ ...prev, menx: !prev.menx }));
+    },
+    isSlotActive: false,
+  },
+  {
+    child: "/icons/libra.png",
+    description: "septor",
+    onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
+      sceneRef!.current.animateFactionVisibility("septor");
+      setState((prev) => ({ ...prev, septor: !prev.septor }));
+    },
+    isSlotActive: false,
+  },
+  {
+    child: "/icons/sagittarius.png",
+    description: "namstx",
+    onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
+      sceneRef!.current.animateFactionVisibility("namsxt");
+      setState((prev) => ({ ...prev, namstx: !prev.namstx }));
+    },
+    isSlotActive: false,
+  },
+  {
+    child: "/icons/virgo.png",
+    description: "ka",
+    onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
+      sceneRef!.current.animateFactionVisibility("ka");
+      setState((prev) => ({ ...prev, ka: !prev.ka }));
+    },
+    isSlotActive: false,
+  },
+  {
+    child: "/icons/aquarius.png",
+    description: "px23t",
+    onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
+      sceneRef!.current.animateFactionVisibility("px23t");
+      setState((prev) => ({ ...prev, px23t: !prev.px23t }));
+    },
+    isSlotActive: false,
   },
 ];
 
@@ -59,49 +135,4 @@ const jumpTunnelsData = [
   },
 ];
 
-const factions = [
-  {
-    child: "/icons/gemini.png",
-    description: "Banu",
-    onClick: (scene: any) => {
-      scene.current.animateFactionVisibility("banu");
-    },
-  },
-  {
-    child: "/icons/capricorn.png",
-    description: "Menx",
-    onClick: (scene: any) => {
-      scene.current.animateFactionVisibility("menx");
-    },
-  },
-  {
-    child: "/icons/libra.png",
-    description: "Septor",
-    onClick: (scene: any) => {
-      scene.current.animateFactionVisibility("septor");
-    },
-  },
-  {
-    child: "/icons/sagittarius.png",
-    description: "Namst'x",
-    onClick: (scene: any) => {
-      scene.current.animateFactionVisibility("namsxt");
-    },
-  },
-  {
-    child: "/icons/virgo.png",
-    description: "KA",
-    onClick: (scene: any) => {
-      scene.current.animateFactionVisibility("ka");
-    },
-  },
-  {
-    child: "/icons/aquarius.png",
-    description: "PX23T",
-    onClick: (scene: any) => {
-      scene.current.animateFactionVisibility("px23t");
-    },
-  },
-];
-
-export { cameraData, sensorData, jumpTunnelsData, factions };
+export { cameraConfig, sensorConfig, jumpTunnelsData, factionConfig };

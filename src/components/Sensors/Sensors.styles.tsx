@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled(motion.div)`
   display: flex;
   padding: 1%;
   align-items: center;
@@ -15,6 +15,7 @@ export const Container = styled.div`
 export const SensorName = styled.span`
   font-size: 0.6rem;
   color: ${({ theme }) => theme.blueHover};
+  text-transform: capitalize;
 `;
 
-export const SensorContainer = styled.div``;
+export const SensorContainer = styled(motion.div)``;

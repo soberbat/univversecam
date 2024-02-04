@@ -17,7 +17,7 @@ const SkewedContainer = ({
   isActiveSlot,
   isChildImage,
 }: ISkewedContainer) => {
-  const [isActive, setisActive] = useState(false);
+  const [isActive, setisActive] = useState(isActiveSlot);
   const { sceneRef } = useContext(AppContext);
 
   const selectSlot = () => {
@@ -25,7 +25,7 @@ const SkewedContainer = ({
     onClick && onClick(sceneRef);
   };
   return (
-    <Wrapper isActive={isActiveSlot || isActive} onClick={selectSlot}>
+    <Wrapper isActive={isActiveSlot} onClick={selectSlot}>
       <InnerWrapper>
         {isChildImage ? <Image src={children} /> : children}
       </InnerWrapper>

@@ -29,6 +29,7 @@ export const SlotName = styled.span(
   ({ theme }) => css`
     font-weight: 500;
     color: ${theme.blueHover};
+    text-transform: capitalize;
   `
 );
 
@@ -36,5 +37,6 @@ export const SelectedCategory = styled.span(
   ({ theme }) => css`
     font-weight: 500;
     color: ${theme.glowyBlue};
+    text-transform: capitalize;
   `
 );

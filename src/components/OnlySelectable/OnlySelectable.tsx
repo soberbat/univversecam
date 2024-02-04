@@ -8,14 +8,14 @@ import {
   SelectedCategory,
   NameWrapper,
 } from "./OnlySelectable.styles";
-import useApp from "../state/useApp";
 import AppContext from "../state/AppContext";
 
 interface Selectable {
   data: {
-    onClick: (scene: any) => void;
+    onClick: <T>(prop: T) => void;
     description: string;
     child: any;
+    isSlotActive: boolean;
   }[];
   selectionCategory: string;
   canSelectMultiple?: boolean;
@@ -30,7 +30,7 @@ const Selectable = ({
 }: Selectable) => {
   const [activeSlot, setActiveSlot] = useState<number | null>(0);
   const [hoveredSection, setHoveredSection] = useState("");
-  const [isHovered, setisHovered] = useState(Boolean);
+  const [isHovered, setisHovered] = useState<boolean>();
   const [selectedSection, setSelectedSection] = useState("");
   const { sceneRef } = useContext(AppContext);
 
@@ -38,7 +38,8 @@ const Selectable = ({
     onClick: (sceneRef: any) => void,
     child: any,
     description: string,
-    i: number
+    i: number,
+    isSlotActive: boolean
   ) => (
     <SkewedContainer
       isChildImage={isChildImage}
@@ -48,7 +49,7 @@ const Selectable = ({
         setActiveSlot(i);
         setSelectedSection(`/ ${description}`);
       }}
-      isActiveSlot={activeSlot === i}
+      isActiveSlot={isSlotActive}
     >
       {child}
     </SkewedContainer>
@@ -57,19 +58,26 @@ const Selectable = ({
   return (
     <Wrapper>
       <OnlySelectableSlot>
-        {data.map(({ onClick, child, description }, i) => {
+        {data.map(({ onClick, child, description, isSlotActive }, i) => {
           return (
             <SkewedWrapper
               onMouseEnter={() => {
                 setisHovered(true);
-                setHoveredSection(`/ ${description}`);
+                setHoveredSection(`/${description}`);
               }}
               onMouseLeave={() => setisHovered(false)}
             >
               {!canSelectMultiple ? (
-                renderSingularSelectionButtons(onClick, child, description, i)
+                renderSingularSelectionButtons(
+                  onClick,
+                  child,
+                  description,
+                  i,
+                  isSlotActive
+                )
               ) : (
                 <SkewedContainer
+                  isActiveSlot={isSlotActive}
                   isChildImage={isChildImage}
                   canSelectMultiple={true}
                   onClick={() => {

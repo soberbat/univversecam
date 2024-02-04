@@ -1,6 +1,6 @@
 import { useAnimation } from "framer-motion";
 import { useEffect } from "react";
-import { Bar, ProgressBar, SensorName } from "./SensorBar.styles";
+import { Bar, ProgressBar } from "./SensorBar.styles";
 
 interface ISensorBar {
   percentage: number;
@@ -19,13 +19,15 @@ const SensorBar = ({ percentage }: ISensorBar) => {
       width: `${percentage}%`,
       backgroundColor: getColor(percentage),
     });
-  }, [percentage, controls]);
+  }, [percentage]);
 
   return (
     <ProgressBar>
       <Bar
+        initial={false}
         animate={controls}
-        transition={{ duration: 2, type: "spring", damping: 30 }}
+        style={{ width: `${percentage}%` }}
+        transition={{ duration: 4, type: "spring", damping: 30 }}
       />
     </ProgressBar>
   );

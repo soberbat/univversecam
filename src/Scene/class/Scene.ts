@@ -346,9 +346,9 @@ export class Scene {
       });
 
     const pathVisiblity = new TWEEN.Tween({
-      opacity: isVisible ? 0.1 : 0.6,
+      opacity: isVisible ? 0.1 : 0.5,
     })
-      .to({ opacity: isVisible ? 0.6 : 0.1 }, 1000)
+      .to({ opacity: isVisible ? 0.5 : 0.1 }, 1000)
       .onStart(() => {})
       .onComplete(() => {})
       .onUpdate((tween) => {

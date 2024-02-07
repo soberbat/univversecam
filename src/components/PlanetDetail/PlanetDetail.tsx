@@ -32,6 +32,16 @@ const PlanetDetail = ({ planetFocus }) => {
             harmonious symphony that transcends the conventional boundaries of
             communication.
           </PlanetDescription>
+
+          <PlanetDescription>
+            At the heart of Xylovaria's enigmatic allure lies its sentient
+            flora, a collection of bioluminescent plants that not only sustain
+            themselves through photosynthesis but also communicate through
+            intricate patterns of light. These radiant beings form vast,
+            interconnected networks, exchanging information and energy in a
+            harmonious symphony that transcends the conventional boundaries of
+            communication.
+          </PlanetDescription>
         </PlanetInfo>
       </InnerContainer>
     </Container>

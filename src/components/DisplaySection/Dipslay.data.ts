@@ -56,7 +56,7 @@ const sensorConfig = [
 
 const factionConfig = [
   {
-    child: "/icons/gemini.png",
+    child: "/icons/factions/0-circle-fill.svg",
     description: "banu",
     onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
       sceneRef!.current.animateFactionVisibility("banu");
@@ -65,7 +65,7 @@ const factionConfig = [
     isSlotActive: false,
   },
   {
-    child: "/icons/capricorn.png",
+    child: "/icons/factions/1-circle-fill.svg",
     description: "menx",
     onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
       sceneRef!.current.animateFactionVisibility("menx");
@@ -74,7 +74,7 @@ const factionConfig = [
     isSlotActive: false,
   },
   {
-    child: "/icons/libra.png",
+    child: "/icons/factions/2-circle-fill.svg",
     description: "septor",
     onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
       sceneRef!.current.animateFactionVisibility("septor");
@@ -83,7 +83,7 @@ const factionConfig = [
     isSlotActive: false,
   },
   {
-    child: "/icons/sagittarius.png",
+    child: "/icons/factions/3-circle-fill.svg",
     description: "namstx",
     onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
       sceneRef!.current.animateFactionVisibility("namsxt");
@@ -92,7 +92,7 @@ const factionConfig = [
     isSlotActive: false,
   },
   {
-    child: "/icons/virgo.png",
+    child: "/icons/factions/4-circle-fill.svg",
     description: "ka",
     onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
       sceneRef!.current.animateFactionVisibility("ka");
@@ -101,7 +101,7 @@ const factionConfig = [
     isSlotActive: false,
   },
   {
-    child: "/icons/aquarius.png",
+    child: "/icons/factions/5-circle-fill.svg",
     description: "px23t",
     onClick: (sceneRef: SceneRef, setState: setFactionVisibility) => {
       sceneRef!.current.animateFactionVisibility("px23t");

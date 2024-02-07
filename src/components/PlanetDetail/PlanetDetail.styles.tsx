@@ -8,8 +8,8 @@ export const Container = styled(motion.div).attrs({
 })`
   position: fixed;
   width: 30vw;
-  height: 60vh;
-  top: 10%;
+  height: 50vh;
+  top: 20%;
   right: 2%;
   background: rgba(3, 15, 35, 0.472);
   backdrop-filter: blur(10px);

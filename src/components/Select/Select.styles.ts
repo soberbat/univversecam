@@ -13,6 +13,8 @@ export const SkewedSearchInner = styled.div(
 export const SkewedSearch = styled(SkewedWrapper)(
   ({ theme, isInputField }) => css`
     padding: 0 2rem;
+
+    z-index: 99;
     ${isInputField &&
     css`
       :hover {
@@ -26,12 +28,16 @@ export const InputFieldWrap = styled.div`
   transform: skew(-38deg);
   padding: 0 0.5rem;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-export const InputField = styled.input(
+export const Selection = styled.div(
   ({ theme }) => css`
     background-color: transparent;
     position: relative;
+    text-transform: capitalize;
     border: none;
     width: 13vw;
     padding: 0.2rem;
@@ -43,6 +49,15 @@ export const InputField = styled.input(
     }
   `
 );
+
+interface ICaret {
+  isExpanded: boolean;
+}
+export const Caret = styled.img.attrs({
+  src: "/icons/caret.svg",
+})<ICaret>`
+  transform: ${({ isExpanded }) => (isExpanded ? "scale(1)" : "scale(-1)")};
+`;
 
 export const Skew = styled.div(
   ({ theme }) => css`

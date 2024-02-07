@@ -2,9 +2,10 @@ import { useRef, useState } from "react";
 
 export default function useApp() {
   const sceneRef = useRef<any | null>(null);
+  const [isFactionSearchVisible, setIsFactionSearchVisible] = useState(false);
   const [camera, setCamera] = useState({
-    ["3D"]: true,
-    ["2D"]: false,
+    "3D": true,
+    "2D": false,
   });
   const [sensorVisibility, setSensorVisibility] = useState({
     population: false,
@@ -28,5 +29,7 @@ export default function useApp() {
     setFactionVisibility,
     camera,
     setCamera,
+    isFactionSearchVisible,
+    setIsFactionSearchVisible,
   };
 }

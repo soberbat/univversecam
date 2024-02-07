@@ -6,8 +6,9 @@ import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import AppContext from "../components/state/AppContext";
 import PlanetDetail from "../components/PlanetDetail/PlanetDetail";
+import FactionSearch from "../components/FactionSearch/FactionSearch";
 const Environment = () => {
-  const { sceneRef } = useContext(AppContext);
+  const { sceneRef, isFactionSearchVisible } = useContext(AppContext);
   const rendererWrapper = useRef<HTMLDivElement | null>(null);
   const [planetFocus, setPlanetFocus] = useState<undefined | string>(undefined);
   const isFocusedOnPlanet = planetFocus !== undefined;
@@ -20,18 +21,14 @@ const Environment = () => {
           handlePlanetFocus,
         });
         await sceneRef!.current.init();
+        console.log("---- animate should start");
         sceneRef!.current.animate();
+        console.log("---- animate started");
       })();
   }, []);
 
-  useEffect(() => {}, [planetFocus]);
-
   const handlePlanetFocus = (focusedPlanet: string | undefined) => {
     setPlanetFocus(focusedPlanet);
-  };
-
-  const releaseControls = () => {
-    sceneRef!.current.releaseControls();
   };
 
   return (
@@ -41,6 +38,8 @@ const Environment = () => {
       <Footer />
       <AnimatePresence>
         {isFocusedOnPlanet && <PlanetDetail planetFocus={planetFocus} />}
+        {isFactionSearchVisible && <FactionSearch />}
+        {/* <FactionSearch /> */}
       </AnimatePresence>
     </Container>
   );

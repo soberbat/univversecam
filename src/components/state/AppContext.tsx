@@ -3,11 +3,14 @@ import { Scene } from "../../Scene/class/Scene";
 import {
   setCamera,
   setFactionVisibility,
+  setIsFactionSearchVisible,
   setSensorVisibility,
 } from "../../types/appTypes";
 
 export interface IState {
   sceneRef: React.MutableRefObject<Scene> | null;
+  isFactionSearchVisible: boolean;
+  setIsFactionSearchVisible: setIsFactionSearchVisible;
   setSensorVisibility: setSensorVisibility;
   sensorVisibility: {
     population: boolean;
@@ -30,8 +33,9 @@ export interface IState {
   setCamera: setCamera;
 }
 
-export const State = {
+const defaultState: IState = {
   sceneRef: null,
+  isFactionSearchVisible: false,
   sensorVisibility: {
     population: false,
     threat: false,
@@ -52,6 +56,9 @@ export const State = {
   setSensorVisibility: () => {},
   setCamera: () => {},
   setFactionVisibility: () => {},
+  setIsFactionSearchVisible: () => {},
 };
 
-export default createContext<IState>(State);
+const StateContext = createContext<IState>(defaultState);
+
+export default StateContext;

@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import Selectable from "../OnlySelectable/OnlySelectable";
-import SkewedContainer from "../SkewedContainer/SkewedContainer";
+import React, { useContext, useState } from "react";
 import {
   RoutesWrapper,
   SkewedSearch,
@@ -8,27 +6,24 @@ import {
   SearchBarsWrapper,
 } from "./RoutesSection.styles";
 
-import data from "./Routes.data";
-import SearchBar from "../SearchBar/SearchBar";
+import AppContext from "../state/AppContext";
+import Select from "../Select/Select";
 
 export default function RoutesSection() {
-  const [destination, setDestination] = useState({ from: "", to: "araba" });
+  const { setIsFactionSearchVisible } = useContext(AppContext);
+
+  const onClick = () => {
+    setIsFactionSearchVisible(true);
+  };
 
   return (
     <RoutesWrapper>
-      <SkewedSearch isActive={false} disabled={true}>
-        <SkewedSearchInner> CALCULATE </SkewedSearchInner>
+      <SkewedSearch onClick={onClick} isActive={false} disabled={false}>
+        <SkewedSearchInner> Inspect </SkewedSearchInner>
       </SkewedSearch>
 
-      <Selectable
-        data={data}
-        isChildImage={false}
-        canSelectMultiple={false}
-        selectionCategory="Ship Size"
-      />
-
       <SearchBarsWrapper>
-        <SearchBar />
+        <Select />
       </SearchBarsWrapper>
     </RoutesWrapper>
   );

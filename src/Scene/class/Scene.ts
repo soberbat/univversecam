@@ -1,10 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
-import { LottieLoader } from "three/examples/jsm/loaders/LottieLoader";
 import * as TWEEN from "@tweenjs/tween.js";
-import { Object3D, Vector3 } from "three";
+import { factionData } from "./config";
 
 interface SceneProps {
   rendererContainer: any;
@@ -93,11 +91,209 @@ export class Scene {
   };
 
   init = async () => {
-    await this.loadObjects();
-    await this.initLights();
+    this.loadModels();
+    this.initLights();
     this.initSprites();
     this.addStars();
     this.rendererContainer.addEventListener("mousedown", this.handleRaycasting);
+  };
+
+  rotatePlanets = () => {
+    this.planets.forEach((planet, i) => {
+      planet.position.set(
+        Math.sin(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 3,
+        0,
+        Math.cos(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 3
+      );
+    });
+  };
+
+  loadModels = () => {
+    const planets = ["alien", "serenity", "tree", "beta"];
+
+    const loader = new GLTFLoader();
+
+    const planetLoadMap = planets.map((planet, i) => {
+      return new Promise((resolve, reject) => {
+        loader.load(
+          `/assets/planets/${planet}.glb`,
+          (scene) => {
+            const planetGroup = this.world.clone();
+            planetGroup.userData.planetName = planet;
+            planetGroup.position.set(0, 0, 0);
+
+            (planetGroup as any).isPlanet = true;
+
+            scene.scene.traverse((item) => {
+              item.scale.set(1, 1, 1);
+              item.position.set(0, 0, 0);
+            });
+
+            planetGroup.add(scene.scene);
+            this.planets.push(planetGroup);
+            this.scene.add(planetGroup);
+            resolve(scene.scene);
+          }
+          // ,
+          // (progress) => {
+          //   console.log(progress);
+          // }
+        );
+      });
+    });
+
+    return Promise.all(planetLoadMap);
+  };
+
+  initLights = () => {
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const directionalLight = new THREE.DirectionalLight(0xffc0cb, 0.6);
+    const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.7);
+    this.scene.add(ambientLight, directionalLight, hemisphereLight);
+  };
+
+  initSprites = () => {
+    const factionsWithSpriteMap = factionData.map(({ name, color }) => ({
+      spriteMap: this.loadSpriteMaterial(name),
+      color,
+    }));
+
+    factionsWithSpriteMap.forEach(({ spriteMap, color }) => {
+      this.factions.push({
+        sprite: new THREE.SpriteMaterial({ map: spriteMap, opacity: 0.3 }),
+        color,
+      });
+    });
+
+    const lines = this.generateSpritesFromFactions();
+
+    this.fanctionObj = {
+      banu: {
+        material: this.factions[0].sprite,
+        isVisible: true,
+        lineMat: lines[0],
+      },
+      menx: {
+        material: this.factions[1].sprite,
+        isVisible: true,
+        lineMat: lines[1],
+      },
+      septor: {
+        material: this.factions[2].sprite,
+        isVisible: true,
+        lineMat: lines[2],
+      },
+      namsxt: {
+        material: this.factions[3].sprite,
+        isVisible: true,
+        lineMat: lines[3],
+      },
+      ka: {
+        material: this.factions[4].sprite,
+        isVisible: true,
+        lineMat: lines[4],
+      },
+      px23t: {
+        material: this.factions[5].sprite,
+        isVisible: true,
+        lineMat: lines[5],
+      },
+    };
+  };
+
+  generateSpritesFromFactions = () => {
+    return this.factions.map(({ sprite, color }) => {
+      const length = this.getRandomNumber(5, 15);
+      const opacity = 0.1;
+      const transparent = true;
+      const mat = new THREE.LineBasicMaterial({ color, transparent, opacity });
+
+      for (const _ of Array.from({ length })) {
+        const newSprite = this.createSprite(sprite);
+        this.drawLine(mat, newSprite);
+      }
+
+      return mat;
+    });
+  };
+
+  drawLine = (lineMaterial: THREE.LineBasicMaterial, sprite: THREE.Sprite) => {
+    const curve = new THREE.QuadraticBezierCurve3(
+      sprite.position.clone(),
+      new THREE.Vector3(
+        sprite.position.x / 2,
+        sprite.position.y / 2 + 3,
+        sprite.position.z / 2
+      ),
+      new THREE.Vector3(0, 0, 0)
+    );
+
+    const points = curve.getPoints(100);
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    this.scene.add(line);
+  };
+
+  createSprite = (spriteMaterial: THREE.SpriteMaterial) => {
+    const sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(0.5, 0.5, 0.5);
+    sprite.position.set(
+      this.getRandomNumber(-20, 20),
+      this.getRandomNumber(-10, 10),
+      this.getRandomNumber(-10, 10)
+    );
+
+    this.scene.add(sprite);
+
+    return sprite;
+  };
+
+  addStars = () => {
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 15000;
+
+    const vertices = new Float32Array(particlesCount);
+
+    for (let i = 0; i < particlesCount; i++) {
+      vertices[i] = (Math.random() - 0.5) * 100;
+    }
+
+    const buffer = new THREE.BufferAttribute(vertices, 3);
+    particlesGeometry.setAttribute("position", buffer);
+
+    const textureLoader = new THREE.TextureLoader();
+    const map = textureLoader.load("/star.png");
+
+    const size = 0.1;
+    const transparent = true;
+    const material = new THREE.PointsMaterial({ map, transparent, size });
+
+    const stars = new THREE.Points(particlesGeometry, material);
+    this.scene.add(stars);
+  };
+
+  loadSpriteMaterial = (name: string) => {
+    return new THREE.TextureLoader().load(`/assets/factions/${name}.png`);
+  };
+
+  traverseThroughIntersection = (intersect: THREE.Object3D<THREE.Event>) => {
+    let traversed: THREE.Object3D<THREE.Event> | undefined = undefined;
+
+    intersect.traverseAncestors((obj) => {
+      if (obj.isPlanet === true) {
+        traversed = obj;
+        this.isSelected = true;
+        return;
+      }
+    });
+
+    this.isSelected = traversed !== undefined;
+    return traversed;
+  };
+
+  getRandomNumber = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
   handleRaycasting = (e: MouseEvent) => {
@@ -127,208 +323,7 @@ export class Scene {
     }
   };
 
-  rotatePlanets = () => {
-    this.planets.forEach((planet, i) => {
-      planet.position.set(
-        Math.sin(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 3,
-        0,
-        Math.cos(((Date.now() % 60000) / 60000) * i * Math.PI * 2) * i * 3
-      );
-    });
-  };
-
-  moveCamera = () => {
-    this.isCameraMovingFree = false;
-    const randX = this.randomIntFromInterval(-10, 10);
-    const randY = this.randomIntFromInterval(39, 41);
-    const randZ = this.randomIntFromInterval(4, 6);
-    this.animateControls({ x: randX, y: randY, z: randZ }, {}, true, 8000);
-  };
-
-  loadObjects = () => {
-    const planets = ["sun", "alien", "serenity", "tree", "beta"];
-    const loader = new GLTFLoader();
-
-    const planetAll = planets.map((planet, i) => {
-      return new Promise((resolve, reject) => {
-        loader.load(`/assets/planets/${planet}.glb`, (scene) => {
-          const planetGroup = this.world.clone();
-          planetGroup.userData.planetName = planet;
-          planetGroup.position.set(0, 0, 0);
-
-          (planetGroup as any).isPlanet = true;
-
-          scene.scene.traverse((item) => {
-            item.scale.set(1, 1, 1);
-            item.position.set(0, 0, 0);
-          });
-
-          planetGroup.add(scene.scene);
-          this.planets.push(planetGroup);
-          this.scene.add(planetGroup);
-
-          resolve(scene.scene);
-        });
-      });
-    });
-
-    return Promise.all(planetAll).then((values) => {});
-  };
-
-  initLights = () => {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    const directionalLight = new THREE.DirectionalLight(0xffc0cb, 0.6);
-    const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 0.7);
-    this.scene.add(ambientLight, directionalLight, hemisphereLight);
-  };
-
-  addStars = () => {
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 15000;
-
-    const vertices = new Float32Array(particlesCount);
-
-    for (let i = 0; i < particlesCount; i++) {
-      vertices[i] = (Math.random() - 0.5) * 100;
-    }
-
-    const buffer = new THREE.BufferAttribute(vertices, 3);
-    particlesGeometry.setAttribute("position", buffer);
-
-    const textureLoader = new THREE.TextureLoader();
-    const map = textureLoader.load("/star.png");
-
-    const size = 0.1;
-    const transparent = true;
-    const material = new THREE.PointsMaterial({ map, transparent, size });
-
-    const stars = new THREE.Points(particlesGeometry, material);
-    this.scene.add(stars);
-  };
-
-  animateAreaLight = (intersect: any) => {
-    const areaLight = intersect.children[1];
-    const areaLightVisibility = new TWEEN.Tween(areaLight)
-      .to({ intensity: 10 })
-      .duration(1000)
-      .easing(TWEEN.Easing.Circular.InOut);
-
-    areaLightVisibility.start();
-  };
-
-  loadSpriteMaterial = (name: string) => {
-    return new THREE.TextureLoader().load(`/assets/factions/${name}.png`);
-  };
-
-  initSprites = () => {
-    const factionData = [
-      { name: "Banu", color: "#FF0000" },
-      { name: "Menx", color: "#7AC943" },
-      { name: "Septor", color: "#FF931E" },
-      { name: "Namst'x", color: "#FF00FF" },
-      { name: "Ka", color: "#0000FF" },
-      { name: "Px", color: "#3FA9F5" },
-    ];
-
-    const factionMaps = factionData.map(({ name, color }) => ({
-      spriteMap: this.loadSpriteMaterial(name),
-      color,
-    }));
-
-    factionMaps.forEach(({ spriteMap, color }) => {
-      this.factions.push({
-        sprite: new THREE.SpriteMaterial({ map: spriteMap, opacity: 0.3 }),
-        color,
-      });
-    });
-
-    const lines = this.generateSpritesFromFactions();
-
-    this.fanctionObj = {
-      banu: { material: this.factions[0], isVisible: true, lineMat: lines[0] },
-      menx: { material: this.factions[1], isVisible: true, lineMat: lines[1] },
-      septor: {
-        material: this.factions[2],
-        isVisible: true,
-        lineMat: lines[2],
-      },
-      namsxt: {
-        material: this.factions[3],
-        isVisible: true,
-        lineMat: lines[3],
-      },
-      ka: { material: this.factions[4], isVisible: true, lineMat: lines[4] },
-      px23t: { material: this.factions[5], isVisible: true, lineMat: lines[5] },
-    };
-  };
-
-  generateSpritesFromFactions = () => {
-    return this.factions.map(({ sprite, color }) => {
-      const randomNum = this.randomIntFromInterval(5, 15);
-      const opacity = 0.1;
-      const transparent = true;
-      const mat = new THREE.LineBasicMaterial({ color, transparent, opacity });
-
-      for (let i = 0; i < randomNum; i++) {
-        const newSprite = this.createSprite(sprite);
-        this.drawLine(mat, newSprite);
-      }
-
-      return mat;
-    });
-  };
-
-  drawLine = (lineMaterial: THREE.LineBasicMaterial, sprite: THREE.Sprite) => {
-    const curve = new THREE.QuadraticBezierCurve3(
-      sprite.position.clone(),
-      new THREE.Vector3(
-        sprite.position.x / 2,
-        sprite.position.y / 2 + this.randomIntFromInterval(1, 5),
-        sprite.position.z / 2
-      ),
-      new THREE.Vector3(0, 1, 0)
-    );
-
-    const points = curve.getPoints(50);
-    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-
-    const line = new THREE.Line(lineGeometry, lineMaterial);
-    this.scene.add(line);
-  };
-
-  createSprite = (spriteMaterial: THREE.SpriteMaterial) => {
-    const sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(0.5, 0.5, 0.5);
-    sprite.position.set(
-      this.randomIntFromInterval(-20, 20),
-      this.randomIntFromInterval(-10, 10),
-      this.randomIntFromInterval(-10, 10)
-    );
-
-    this.scene.add(sprite);
-
-    return sprite;
-  };
-
-  traverseThroughIntersection = (intersect: THREE.Object3D<THREE.Event>) => {
-    let traversed: THREE.Object3D<THREE.Event> | undefined = undefined;
-
-    intersect.traverseAncestors((obj) => {
-      if (obj.isPlanet === true) {
-        traversed = obj;
-        this.isSelected = true;
-        return;
-      }
-    });
-
-    this.isSelected = traversed !== undefined;
-    return traversed;
-  };
-
-  randomIntFromInterval = (min: number, max: number) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
+  //TWEENİNG FUNCTİONS
   animateFactionVisibility = (faction: string) => {
     const { material, isVisible, lineMat } = this.fanctionObj[faction];
 
@@ -346,9 +341,9 @@ export class Scene {
       });
 
     const pathVisiblity = new TWEEN.Tween({
-      opacity: isVisible ? 0.1 : 0.5,
+      opacity: isVisible ? 0.1 : 0.3,
     })
-      .to({ opacity: isVisible ? 0.5 : 0.1 }, 1000)
+      .to({ opacity: isVisible ? 0.3 : 0.1 }, 1000)
       .onStart(() => {})
       .onComplete(() => {})
       .onUpdate((tween) => {
@@ -357,6 +352,16 @@ export class Scene {
 
     factionVisibility.start();
     pathVisiblity.start();
+  };
+
+  animateAreaLight = (intersect: any) => {
+    const areaLight = intersect.children[1];
+    const areaLightVisibility = new TWEEN.Tween(areaLight)
+      .to({ intensity: 10 })
+      .duration(1000)
+      .easing(TWEEN.Easing.Circular.InOut);
+
+    areaLightVisibility.start();
   };
 
   releaseControls = () => {

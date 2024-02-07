@@ -49,10 +49,10 @@ export const SkewedView = styled.div<{ activeTab: boolean }>(
     position: relative;
     width: 100%;
     height: 100%;
-      display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
-
+    cursor: pointer;
     position: relative;
     background-color: black;
     display: flex;
@@ -70,30 +70,28 @@ export const SkewedView = styled.div<{ activeTab: boolean }>(
       bottom: -1px;
       left: -2px;
       color: ${theme.glowyBlue};
-      border-left: 1px solid
+      border-left: 1px solid;
       z-index: 1;
-        ${activeTab ? `${theme.glowyBlue}` : `${theme.fadedBlue}`};
+      ${activeTab ? `${theme.glowyBlue}` : `${theme.fadedBlue}`};
 
-      background-color: ${
-        activeTab ? `${theme.glowyBlue}` : `${theme.fadedBlue}`
-      };
+      background-color: ${activeTab
+        ? `${theme.glowyBlue}`
+        : `${theme.fadedBlue}`};
       box-shadow: ${activeTab ? "0px 0px 20px 4px rgb(68, 237, 247, 0.4)" : ""};
     }
 
-    ${
-      activeTab &&
-      css`
-        ::after {
-          content: " ";
-          position: absolute;
-          display: block;
-          width: 100%;
-          height: 2px;
-          bottom: -2px;
-          background-color: black;
-        }
-      `
-    }
+    ${activeTab &&
+    css`
+      ::after {
+        content: " ";
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 2px;
+        bottom: -2px;
+        background-color: black;
+      }
+    `}
   `
 );
 

@@ -43,6 +43,10 @@ export const Wrapper = styled.div<IWrapper>(
       css`
         background-color: ${theme.glowyBlue};
         box-shadow: 0px 0px 10px 4px rgb(68, 237, 247, 0.5);
+
+        & > div {
+          width: 250px;
+        }
       `}
     }
   `

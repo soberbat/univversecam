@@ -1,12 +1,20 @@
 import React from "react";
 import { Scene } from "../Scene/class/Scene";
 
+export type SensorType = "threat" | "population" | "economy";
+export type CameraType = "3D" | "2D";
+export type SceneRef = React.MutableRefObject<Scene> | null;
+
 export type setSensorVisibility = React.Dispatch<
   React.SetStateAction<{
     population: boolean;
     threat: boolean;
     economy: boolean;
   }>
+>;
+
+export type setIsFactionSearchVisible = React.Dispatch<
+  React.SetStateAction<boolean>
 >;
 
 export type setFactionVisibility = React.Dispatch<
@@ -27,9 +35,6 @@ export type setCamera = React.Dispatch<
   }>
 >;
 
-export type SensorType = "threat" | "population" | "economy";
-export type CameraType = "3D" | "2D";
-
 export type FactionType =
   | "banu"
   | "menx"
@@ -37,5 +42,3 @@ export type FactionType =
   | "namstx"
   | "ka"
   | "px23t";
-
-export type SceneRef = React.MutableRefObject<Scene> | null;

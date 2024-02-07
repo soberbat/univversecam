@@ -16,6 +16,7 @@ export const SkewedSearch = styled(SkewedWrapper)(
     font-size: 0.7rem;
     letter-spacing: 0.2rem;
     font-weight: 400;
+    cursor: pointer;
     ${disabled &&
     css`
       //   background-color: ${theme.fadedBlueSecondary};
@@ -24,7 +25,9 @@ export const SkewedSearch = styled(SkewedWrapper)(
   `
 );
 
-export const SkewedSearchInner = styled(InnerWrapper)``;
+export const SkewedSearchInner = styled(InnerWrapper)`
+  text-transform: uppercase;
+`;
 
 export const SearchBarsWrapper = styled.div`
   display: flex;

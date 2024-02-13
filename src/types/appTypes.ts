@@ -1,5 +1,5 @@
 import React from "react";
-import { Scene } from "../Scene/class/Scene";
+import { Scene } from "../components/Scene/class/Scene";
 
 export type SensorType = "threat" | "population" | "economy";
 export type CameraType = "3D" | "2D";

@@ -6,7 +6,7 @@ import {
   SearchBarsWrapper,
 } from "./RoutesSection.styles";
 
-import AppContext from "../state/AppContext";
+import AppContext from "../../state/AppContext";
 import Select from "../Select/Select";
 
 export default function RoutesSection() {

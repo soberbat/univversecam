@@ -1,4 +1,4 @@
-import Environment from "../../Scene/Scene";
+import Environment from "../Scene/Scene";
 import { Wrapper } from "./MainView.styles";
 
 export default function MainView() {

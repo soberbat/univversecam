@@ -1,12 +1,17 @@
 import styled, { css } from "styled-components";
+import { mediaLarge } from "../../utils/media";
 
 export const Wrapper = styled.div`
   position: absolute;
   top: -35%;
   right: -0.2%;
-  width: 30%;
+  width: 60%;
   height: 35%;
   display: flex;
+
+  ${mediaLarge(css`
+    width: 30%;
+  `)}
 `;
 
 //SKEWED BUTTON

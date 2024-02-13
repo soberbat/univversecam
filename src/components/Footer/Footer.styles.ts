@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   height: 10vh;
   background-color: black;
   z-index: 2;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   box-sizing: border-box;
 `;

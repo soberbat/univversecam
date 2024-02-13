@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Container, SensorContainer, SensorName } from "./Sensors.styles";
 import SensorBar from "../SensorBar/SensorBar";
-import AppContext from "../state/AppContext";
+import AppContext from "../../state/AppContext";
 import { AnimatePresence } from "framer-motion";
 
 enum SensorData {

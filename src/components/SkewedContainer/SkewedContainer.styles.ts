@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { mediaLarge } from "../../utils/media";
 
 export interface IWrapper {
   isActive?: boolean;
@@ -14,8 +15,8 @@ export const Wrapper = styled.div<IWrapper>(
       ? theme.fadedBlueSecondary
       : theme.blueDefault};
     width: fit-content;
-    padding: 0rem 0.7rem;
     box-sizing: border-box;
+    padding: 0rem 0.4rem;
     transform: skew(40deg);
     font-size: 0.55rem;
     font-weight: 600;
@@ -49,6 +50,10 @@ export const Wrapper = styled.div<IWrapper>(
         }
       `}
     }
+
+    ${mediaLarge(css`
+      padding: 0rem 0.7rem;
+    `)}
   `
 );
 

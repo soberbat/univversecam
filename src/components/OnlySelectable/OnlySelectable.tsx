@@ -8,7 +8,7 @@ import {
   SelectedCategory,
   NameWrapper,
 } from "./OnlySelectable.styles";
-import AppContext from "../state/AppContext";
+import AppContext from "../../state/AppContext";
 
 interface Selectable {
   data: {

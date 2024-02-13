@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { mediaLarge } from "../../utils/media";
 
 export const Container = styled(motion.div).attrs({
   initial: { opacity: 0 },
@@ -7,12 +8,22 @@ export const Container = styled(motion.div).attrs({
   exit: { opacity: 0 },
 })`
   position: fixed;
-  width: 30vw;
+  width: 90vw;
   height: 50vh;
-  top: 20%;
-  right: 2%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: rgba(3, 15, 35, 0.472);
   backdrop-filter: blur(10px);
+  overflow: hidden;
+  ${mediaLarge(css`
+    width: 30vw;
+    height: 50vh;
+    top: 20%;
+    left: unset;
+    right: 2%;
+    transform: none;
+  `)}
 `;
 
 export const TitleWrap = styled.div`
@@ -36,6 +47,9 @@ export const PlanetInfo = styled.div`
   padding: 1rem;
   margin-top: 1rem;
   border-radius: 8px;
+  overflow-y: scroll;
+  height: 80%;
+  box-sizing: border-box;
 `;
 
 export const PlanetDescription = styled.p`

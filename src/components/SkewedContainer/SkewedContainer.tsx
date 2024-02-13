@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import { InnerWrapper, Wrapper, Image } from "./SkewedContainer.styles";
-import AppContext from "../state/AppContext";
+import AppContext from "../../state/AppContext";
 
 interface ISkewedContainer {
   children: any;

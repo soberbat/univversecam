@@ -19,6 +19,7 @@
 #root {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -34,6 +35,7 @@ a:hover {
 html {
   width: 90vw;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 body {

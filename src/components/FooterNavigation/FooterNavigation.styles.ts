@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { mediaLarge } from "../../utils/media";
 
 export const Wrapper = styled.div(
   ({ theme }) => css`
@@ -24,7 +25,11 @@ export const Wrapper = styled.div(
 export const InnerWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  padding: 0 2rem;
   height: 100%;
-  padding: 0rem 4rem;
-  gap: 2%;
+
+  ${mediaLarge(css`
+    padding: 0rem 4rem;
+    gap: 2%;
+  `)}
 `;

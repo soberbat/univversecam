@@ -1,25 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Description,
-  Dot,
-  FactionGroupName,
-  FactionName,
-  GasAmount,
-  HeaderWrap,
-  InnerContainer,
-  BackgroundOverlay,
-  LeftPanel,
-  Line,
-  RightPanel,
-  RightPanelRow,
-  RightPanelText,
-  RightPanelTitle,
-  Slide,
-  SliderInnerWrapper,
-  SliderNavgiation,
-  SliderWrapper,
-} from "./FactionSearch.styles";
+import * as S from "./FactionSearch.styles"; // Import styled-components as S
 import { AnimatePresence, useMotionValue } from "framer-motion";
 import { FULL_WIDTH } from "./FactionSearch.config";
 
@@ -35,74 +15,75 @@ const FactionSearch = () => {
   };
 
   return (
-    <Container>
-      <InnerContainer>
-        <Dot />
-        <LeftPanel>
-          <SliderWrapper>
-            <SliderInnerWrapper animate={{ x: `${x.get()}%` }} slide={slide}>
+    <S.Container>
+      <S.InnerContainer>
+        <S.Dot />
+        <S.LeftPanel>
+          <S.SliderWrapper>
+            <S.SliderInnerWrapper animate={{ x: `${x.get()}%` }} slide={slide}>
               {[...Array(slide)].map((_, index) => (
-                <Slide slide={slide}>
-                  <HeaderWrap>
-                    <FactionName>
+                <S.Slide slide={slide} key={index}>
+                  <S.HeaderWrap>
+                    <S.FactionName>
                       Galactic Alliance of Celestial Explorers (G.A.C.E.)
-                    </FactionName>
-                    <FactionGroupName>Banu</FactionGroupName>
-                  </HeaderWrap>
+                    </S.FactionName>
+                    <S.FactionGroupName>Banu</S.FactionGroupName>
+                  </S.HeaderWrap>
 
-                  <Line />
-                  <Description>
+                  <S.Line />
+
+                  <S.Description>
                     The Galactic Alliance of Celestial Explorers is a coalition
                     of advanced civilizations united in their pursuit of
                     knowledge, exploration, and cooperation. Comprising various
                     species and technological marvels, G.A.C.E. stands as a
                     beacon of unity in the vastness of the cosmos.
-                  </Description>
+                  </S.Description>
 
-                  <Description>
-                    <GasAmount>Gas Amount:</GasAmount> G.A.C.E. primarily
+                  <S.Description>
+                    <S.GasAmount>Gas Amount:</S.GasAmount> G.A.C.E. primarily
                     operates within the Nebula Quadrant, a region abundant in
                     exotic gases essential for advanced energy production and
                     propulsion systems. The faction is known for its expertise
                     in harnessing and trading these rare gases.
-                  </Description>
+                  </S.Description>
 
-                  <Description>
-                    <GasAmount>Cultural Exchange Program: </GasAmount>
+                  <S.Description>
+                    <S.GasAmount>Cultural Exchange Program: </S.GasAmount>
                     G.A.C.E. encourages cultural diversity and understanding
                     among member species through a vibrant Cultural Exchange
                     Program. This program facilitates the sharing of art, music,
                     and traditions, fostering unity and mutual respect.
-                  </Description>
-                </Slide>
+                  </S.Description>
+                </S.Slide>
               ))}
-            </SliderInnerWrapper>
-            <SliderNavgiation onClick={onClick} />
-          </SliderWrapper>
-        </LeftPanel>
+            </S.SliderInnerWrapper>
+            <S.SliderNavgiation onClick={onClick} />
+          </S.SliderWrapper>
+        </S.LeftPanel>
 
         <AnimatePresence mode="wait">
-          <RightPanel key={activeSlide}>
-            <RightPanelRow>
-              <RightPanelTitle>Leader</RightPanelTitle>
-              <RightPanelText>The Grand Coordinator C.A</RightPanelText>
-            </RightPanelRow>
-            <RightPanelRow>
-              <RightPanelTitle>Main Headquarters</RightPanelTitle>
-              <RightPanelText>Nexus Station</RightPanelText>
-            </RightPanelRow>
-            <RightPanelRow>
-              <RightPanelTitle>Economy</RightPanelTitle>
-              <RightPanelText>Resource Based</RightPanelText>
-            </RightPanelRow>
-            <RightPanelRow>
-              <RightPanelTitle>Distance from The Planet </RightPanelTitle>
-              <RightPanelText>40,000 LY (Andromeda)</RightPanelText>
-            </RightPanelRow>
-          </RightPanel>
+          <S.RightPanel key={activeSlide}>
+            <S.RightPanelRow>
+              <S.RightPanelTitle>Leader</S.RightPanelTitle>
+              <S.RightPanelText>The Grand Coordinator C.A</S.RightPanelText>
+            </S.RightPanelRow>
+            <S.RightPanelRow>
+              <S.RightPanelTitle>Main Headquarters</S.RightPanelTitle>
+              <S.RightPanelText>Nexus Station</S.RightPanelText>
+            </S.RightPanelRow>
+            <S.RightPanelRow>
+              <S.RightPanelTitle>Economy</S.RightPanelTitle>
+              <S.RightPanelText>Resource Based</S.RightPanelText>
+            </S.RightPanelRow>
+            <S.RightPanelRow>
+              <S.RightPanelTitle>Distance from The Planet </S.RightPanelTitle>
+              <S.RightPanelText>40,000 LY (Andromeda)</S.RightPanelText>
+            </S.RightPanelRow>
+          </S.RightPanel>
         </AnimatePresence>
-      </InnerContainer>
-    </Container>
+      </S.InnerContainer>
+    </S.Container>
   );
 };
 

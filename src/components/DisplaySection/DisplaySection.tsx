@@ -8,7 +8,7 @@ import {
   factionConfig,
 } from "./Dipslay.data";
 import { Wrapper } from "./DisplaySection.styles";
-import AppContext from "../state/AppContext";
+import AppContext from "../../state/AppContext";
 import { CameraType, FactionType, SensorType } from "../../types/appTypes";
 
 export default function DisplaySection() {
@@ -63,13 +63,6 @@ export default function DisplaySection() {
         data={sensorConfigWithState}
         canSelectMultiple={true}
       />
-      {/* <Selectable
-        isChildImage={false}
-        selectionCategory="Jump Tunnels"
-        data={jumpTunnelsData}
-        canSelectMultiple={true}
-      /> */}
-
       <Selectable
         isChildImage={true}
         selectionCategory="Factions"

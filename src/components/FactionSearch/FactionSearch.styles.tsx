@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 import PlanetDetailRow from "../PlanetDetailRow/PlanetDetailRow";
+import { mediaLarge } from "../../utils/media";
 
 interface ISlideCount {
   slide: number;
@@ -19,10 +20,16 @@ export const Container = styled(motion.div).attrs({
   background: rgba(3, 15, 35, 0.472);
   backdrop-filter: blur(10px);
   display: flex;
-  align-items: center;
+  padding-top: 25%;
   justify-content: center;
   box-sizing: border-box;
   color: ${({ theme }) => theme.fadedBlueSecondary};
+
+  ${mediaLarge(css`
+    padding: unset;
+    padding-top: unset;
+    align-items: center;
+  `)};
 `;
 
 export const BackgroundOverlay = styled.div`
@@ -39,8 +46,8 @@ export const BackgroundOverlay = styled.div`
 `;
 
 export const InnerContainer = styled.div`
-  width: 55%;
-  height: 50%;
+  width: 95%;
+  height: 70%;
   border: 1px solid ${({ theme }) => theme.fadedBlue};
   backdrop-filter: blur(10px);
   box-shadow: 0 0 30px ${({ theme }) => theme.glowyBlue};
@@ -52,6 +59,11 @@ export const InnerContainer = styled.div`
   align-items: stretch;
   gap: 1rem;
   overflow: hidden;
+
+  ${mediaLarge(css`
+    width: 55%;
+    height: 50%;
+  `)}
 `;
 
 export const LeftPanel = styled.div`
@@ -88,6 +100,15 @@ export const Slide = styled.div<ISlideCount>(
     width: ${`${100 / slide}%`};
     height: 100%;
     display: inline-block;
+    pointer-events: all;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer/Edge */
+
+    /* Hide scrollbar in Webkit-based browsers */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   `
 );
 

@@ -1,3 +1,4 @@
+import { defaultTheme } from "../../utils/theme";
 import { Container, Continue, InnerContainer } from "./LoadingPage.styles";
 
 interface ILoadingPage {
@@ -5,10 +6,13 @@ interface ILoadingPage {
   onClick: () => void;
 }
 const LoadingPage = ({ isLoaded, onClick }: ILoadingPage) => {
+  const color = isLoaded
+    ? defaultTheme.glowyBlue
+    : defaultTheme.fadedBlueSecondary;
   return (
     <Container>
       <InnerContainer></InnerContainer>
-      <Continue isLoaded={isLoaded} onClick={onClick}>
+      <Continue color={color} onClick={onClick}>
         Enter
       </Continue>
     </Container>

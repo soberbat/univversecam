@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 import styled, { css } from "styled-components";
 import { Dot } from "../FactionSearch/FactionSearch.styles";
 import { mediaLarge } from "../../utils/media";
@@ -41,10 +41,9 @@ export const InnerContainer = styled(motion.div).attrs({
   `)}
 `;
 
-export const Continue = styled.div<{ isLoaded: boolean }>`
+export const Continue = styled.div<{ color: string }>`
   margin-bottom: 5rem;
   cursor: pointer;
-  border-bottom: 1px solid ${({ theme }) => theme.glowyBlue};
-  color: ${({ isLoaded, theme }) =>
-    isLoaded ? theme.glowyBlue : theme.fadedBlueSecondary};
+  border-bottom: 1px solid ${({ color }) => color};
+  color: ${({ color }) => color};
 `;

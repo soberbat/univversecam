@@ -81,8 +81,8 @@ export const SliderWrapper = styled.div`
   overflow: hidden;
 `;
 
-export const SliderNavgiation = styled.div`
-  background-color: ${({ theme }) => theme.fadedBlueSecondary};
+export const SliderNavgiation = styled.div<{ isActive: boolean }>`
+  background-color: ${({ theme }) => theme.fadedBlue};
   cursor: pointer;
   width: 30px;
   height: 30px;
@@ -91,10 +91,14 @@ export const SliderNavgiation = styled.div`
   left: 50%;
   transform: translateX(-50%);
   bottom: 2px;
-  background-image: url("/icons/right-arrow.svg");
+  background-image: ${({ isActive }) =>
+    isActive ? `url("/icons/right-arrow.svg")` : ""};
   background-position: center;
   background-repeat: no-repeat;
   background-size: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Slide = styled(motion.div)<ISlideCount>(

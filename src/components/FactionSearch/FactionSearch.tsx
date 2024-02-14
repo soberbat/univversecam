@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as S from "./FactionSearch.styles";
 import { FULL_WIDTH, SLIDE_COUNT } from "./FactionSearch.config";
 import createData from "../../utils/getData";
 import { FactionSearchData } from "../../types/appTypes";
+import AppContext from "../../state/AppContext";
 import {
   AnimatePresence,
   useAnimationControls,
@@ -24,8 +25,10 @@ interface IFactionSearch {
 
 const FactionSearch = ({ searchedFaction }: IFactionSearch) => {
   const [activeSlide, setActiveSlide] = useState(0);
-  const controls = useAnimationControls();
   const [data, setData] = useState<FactionSearchData | null>(null);
+  const { setIsFactionSearchVisible } = useContext(AppContext);
+  const isNavigationActive = activeSlide < SLIDE_COUNT - 1;
+  const controls = useAnimationControls();
   const x = useMotionValue(0);
 
   const getDescriptions = () => {
@@ -49,7 +52,11 @@ const FactionSearch = ({ searchedFaction }: IFactionSearch) => {
 
   const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     x.set(-(((activeSlide + 1) * FULL_WIDTH) / SLIDE_COUNT));
-    setActiveSlide(activeSlide + 1);
+    setActiveSlide((activeSlide) =>
+      activeSlide < SLIDE_COUNT - 1 ? activeSlide + 1 : activeSlide
+    );
+
+    !isNavigationActive && setIsFactionSearchVisible(false);
   };
 
   useEffect(() => {
@@ -88,7 +95,9 @@ const FactionSearch = ({ searchedFaction }: IFactionSearch) => {
                 </S.Slide>
               ))}
             </S.SliderInnerWrapper>
-            <S.SliderNavgiation onClick={onClick} />
+            <S.SliderNavgiation isActive={isNavigationActive} onClick={onClick}>
+              {isNavigationActive ? "" : "X"}
+            </S.SliderNavgiation>
           </S.SliderWrapper>
         </S.LeftPanel>
 

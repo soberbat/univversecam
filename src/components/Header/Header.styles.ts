@@ -1,17 +1,21 @@
+import { mediaLarge } from "../../utils/media";
 import { Dot } from "../FactionSearch/FactionSearch.styles";
 import { SkewedView } from "./../HeaderTabBar/FooterTabBar.styles";
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   overflow: hidden;
-
   width: 100%;
-  height: 4vh;
+  height: 6vh;
   z-index: 4;
   position: absolute;
 
   inset: 0;
   top: 0;
+
+  ${mediaLarge(css`
+    height: 4vh;
+  `)}
 `;
 
 export const BlackTop = styled.div`
@@ -28,9 +32,14 @@ export const SkewedTabsWrapper = styled.div`
 export const FlashDot = styled(Dot)`
   width: 5px;
   height: 5px;
-  top: 5vh;
+  top: 1vh;
   position: fixed;
-  right: 0.5%;
+  right: 2%;
+
+  ${mediaLarge(css`
+    top: 5vh;
+    right: 0.5%;
+  `)}
 `;
 
 export const SkewedTab = styled.div`
@@ -40,8 +49,12 @@ export const SkewedTab = styled.div`
   background-color: black;
   border-right: 3px solid ${({ theme }) => theme.fadedBlue};
   border-bottom: 2px solid ${({ theme }) => theme.fadedBlue};
-  flex: 0.08;
+  flex: 0.3;
   margin-left: -1rem;
+
+  ${mediaLarge(css`
+    flex: 0.08;
+  `)}
 `;
 
 export const CenterView = styled.div`

@@ -42,7 +42,7 @@ export const InnerContainer = styled(motion.div).attrs({
 `;
 
 export const Continue = styled.div<{ color: string }>`
-  margin-bottom: 5rem;
+  margin-bottom: 20vh;
   cursor: pointer;
   border-bottom: 1px solid ${({ color }) => color};
   color: ${({ color }) => color};

@@ -46,7 +46,7 @@ const Environment = () => {
 
   return (
     <Container>
-      <SceneContainer ref={rendererWrapper} />
+      <SceneContainer isVisible={canUseApp} ref={rendererWrapper} />
       <Header />
       <Footer />
       <AnimatePresence>

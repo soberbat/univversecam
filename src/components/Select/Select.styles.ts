@@ -69,6 +69,7 @@ export const Selection = styled.div(
 export const Caret = styled.img.attrs({
   src: "/icons/caret.svg",
 })<ICaret>`
+  cursor: pointer;
   transform: ${({ isExpanded }) => (isExpanded ? "scale(1)" : "scale(-1)")};
 `;
 

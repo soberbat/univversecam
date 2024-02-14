@@ -22,7 +22,8 @@ export const Container = styled.div`
   }
 `;
 
-export const SceneContainer = styled(motion.div)`
+export const SceneContainer = styled(motion.div)<{ isVisible: boolean }>`
   width: 100%;
   height: 100%;
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
 `;

@@ -16,8 +16,8 @@ export const Container = styled(motion.div).attrs({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(3, 15, 35, 0.745);
-  backdrop-filter: blur(55px);
+  background: rgba(3, 15, 35, 0.224);
+  backdrop-filter: blur(45px);
 `;
 
 export const InnerContainer = styled(motion.div).attrs({

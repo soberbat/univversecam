@@ -10,10 +10,14 @@ import {
 import AppContext from "../../state/AppContext";
 import ExpandedSelectionView from "../ExpandedSelectionView/ExpandedSelectionView";
 
-const Select: FC = () => {
+interface ISelect {
+  selectedFaction: string | null;
+  setSelectedFaction: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const Select = ({ selectedFaction, setSelectedFaction }: ISelect) => {
   const { setSearchedFaction } = useContext(AppContext);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedFaction, setSelectedFaction] = useState("Choose A Faction");
 
   const handleClick = () => setIsExpanded(!isExpanded);
   const onSelect = (faction: string) => {
@@ -28,7 +32,7 @@ const Select: FC = () => {
 
       <SkewedSearchInner>
         <InputFieldWrap>
-          <Selection>{selectedFaction}</Selection>
+          <Selection>{selectedFaction ?? "Choose A Faction"}</Selection>
           <Caret onClick={handleClick} isExpanded={isExpanded} />
         </InputFieldWrap>
       </SkewedSearchInner>

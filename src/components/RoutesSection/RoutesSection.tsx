@@ -10,10 +10,12 @@ import AppContext from "../../state/AppContext";
 import Select from "../Select/Select";
 
 export default function RoutesSection() {
+  const [selectedFaction, setSelectedFaction] = useState<null | string>(null);
   const { setIsFactionSearchVisible, isFactionSearchVisible } =
     useContext(AppContext);
 
   const onClick = () => {
+    if (!selectedFaction) return;
     setIsFactionSearchVisible((prev) => !prev);
   };
 
@@ -26,7 +28,10 @@ export default function RoutesSection() {
       </SkewedSearch>
 
       <SearchBarsWrapper>
-        <Select />
+        <Select
+          selectedFaction={selectedFaction}
+          setSelectedFaction={setSelectedFaction}
+        />
       </SearchBarsWrapper>
     </RoutesWrapper>
   );

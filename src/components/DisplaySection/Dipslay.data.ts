@@ -45,7 +45,7 @@ const sensorConfig = [
     isSlotActive: false,
   },
   {
-    child: "public/icons/cash.svg",
+    child: "/icons/cash.svg",
     description: "economy",
     onClick: (setState: setSensorVisibility) => {
       setState((prev) => ({ ...prev, economy: !prev.economy }));

@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 export default function useApp() {
   const sceneRef = useRef<any | null>(null);
   const [isFactionSearchVisible, setIsFactionSearchVisible] = useState(false);
+  const [searchedFaction, setSearchedFaction] = useState("");
   const [camera, setCamera] = useState({
     "3D": true,
     "2D": false,
@@ -24,12 +25,14 @@ export default function useApp() {
   return {
     sceneRef,
     sensorVisibility,
-    setSensorVisibility,
     factionVisibility,
-    setFactionVisibility,
+    searchedFaction,
     camera,
-    setCamera,
     isFactionSearchVisible,
+    setSensorVisibility,
+    setFactionVisibility,
+    setSearchedFaction,
+    setCamera,
     setIsFactionSearchVisible,
   };
 }

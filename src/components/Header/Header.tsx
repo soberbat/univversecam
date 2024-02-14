@@ -7,6 +7,7 @@ import {
   SkewedTabsWrapper,
   CenterView,
   BlackTop,
+  FlashDot,
 } from "./Header.styles";
 
 export default function Header() {
@@ -18,11 +19,9 @@ export default function Header() {
       <SkewedTabsWrapper>
         <SkewedTab></SkewedTab>
         <CenterView />
-        <SkewedTabReverse
-          isSoundOn={isSoundOn}
-          onClick={() => setisSoundOn(!isSoundOn)}
-        ></SkewedTabReverse>
+        <SkewedTabReverse></SkewedTabReverse>
       </SkewedTabsWrapper>
+      <FlashDot />
     </Wrapper>
   );
 }

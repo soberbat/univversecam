@@ -1,18 +1,62 @@
 import React, { useEffect, useState } from "react";
-import * as S from "./FactionSearch.styles"; // Import styled-components as S
-import { AnimatePresence, useMotionValue } from "framer-motion";
-import { FULL_WIDTH } from "./FactionSearch.config";
+import * as S from "./FactionSearch.styles";
+import { FULL_WIDTH, SLIDE_COUNT } from "./FactionSearch.config";
+import createData from "../../utils/getData";
+import { FactionSearchData } from "../../types/appTypes";
+import {
+  AnimatePresence,
+  useAnimationControls,
+  useMotionValue,
+} from "framer-motion";
 
-const slide = 6;
+const {
+  leader,
+  factionName,
+  description,
+  mainHeadquarters,
+  economy,
+  distanceFromPlanet,
+} = createData;
 
-const FactionSearch = () => {
+interface IFactionSearch {
+  searchedFaction: string;
+}
+
+const FactionSearch = ({ searchedFaction }: IFactionSearch) => {
   const [activeSlide, setActiveSlide] = useState(0);
+  const controls = useAnimationControls();
+  const [data, setData] = useState<FactionSearchData | null>(null);
   const x = useMotionValue(0);
 
+  const getDescriptions = () => {
+    return [...Array(3)].map(() => description());
+  };
+
+  const onAnimationComplete = async () => {
+    await controls.start({ opacity: 0, transition: { duration: 0.1 } });
+
+    setData({
+      descriptions: getDescriptions(),
+      factionName: factionName(),
+      leader: leader(),
+      economy: economy(),
+      mainHeadquarters: mainHeadquarters(),
+      distanceFromPlanet: distanceFromPlanet(),
+    });
+
+    controls.start({ opacity: 1 });
+  };
+
   const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    x.set(-(((activeSlide + 1) * FULL_WIDTH) / slide));
+    x.set(-(((activeSlide + 1) * FULL_WIDTH) / SLIDE_COUNT));
     setActiveSlide(activeSlide + 1);
   };
+
+  useEffect(() => {
+    onAnimationComplete();
+  }, []);
+
+  if (!data) return <></>;
 
   return (
     <S.Container>
@@ -20,40 +64,26 @@ const FactionSearch = () => {
         <S.Dot />
         <S.LeftPanel>
           <S.SliderWrapper>
-            <S.SliderInnerWrapper animate={{ x: `${x.get()}%` }} slide={slide}>
-              {[...Array(slide)].map((_, index) => (
-                <S.Slide slide={slide} key={index}>
+            <S.SliderInnerWrapper
+              onAnimationComplete={onAnimationComplete}
+              animate={{ x: `${x.get()}%` }}
+              slide={SLIDE_COUNT}
+            >
+              {[...Array(SLIDE_COUNT)].map((_, index) => (
+                <S.Slide slide={SLIDE_COUNT} animate={controls} key={index}>
                   <S.HeaderWrap>
-                    <S.FactionName>
-                      Galactic Alliance of Celestial Explorers (G.A.C.E.)
-                    </S.FactionName>
-                    <S.FactionGroupName>Banu</S.FactionGroupName>
+                    <S.FactionName>{data.factionName}</S.FactionName>
+                    <S.FactionGroupName>{searchedFaction}</S.FactionGroupName>
                   </S.HeaderWrap>
-
                   <S.Line />
-
+                  <S.Description>{data.descriptions[0]}</S.Description>
                   <S.Description>
-                    The Galactic Alliance of Celestial Explorers is a coalition
-                    of advanced civilizations united in their pursuit of
-                    knowledge, exploration, and cooperation. Comprising various
-                    species and technological marvels, G.A.C.E. stands as a
-                    beacon of unity in the vastness of the cosmos.
+                    <S.GasAmount>Gas Amount:</S.GasAmount>{" "}
+                    {data.descriptions[1]}
                   </S.Description>
-
                   <S.Description>
-                    <S.GasAmount>Gas Amount:</S.GasAmount> G.A.C.E. primarily
-                    operates within the Nebula Quadrant, a region abundant in
-                    exotic gases essential for advanced energy production and
-                    propulsion systems. The faction is known for its expertise
-                    in harnessing and trading these rare gases.
-                  </S.Description>
-
-                  <S.Description>
-                    <S.GasAmount>Cultural Exchange Program: </S.GasAmount>
-                    G.A.C.E. encourages cultural diversity and understanding
-                    among member species through a vibrant Cultural Exchange
-                    Program. This program facilitates the sharing of art, music,
-                    and traditions, fostering unity and mutual respect.
+                    <S.GasAmount>Cultural Exchange Program:</S.GasAmount>
+                    {data.descriptions[2]}
                   </S.Description>
                 </S.Slide>
               ))}
@@ -63,22 +93,22 @@ const FactionSearch = () => {
         </S.LeftPanel>
 
         <AnimatePresence mode="wait">
-          <S.RightPanel key={activeSlide}>
+          <S.RightPanel animate={controls}>
             <S.RightPanelRow>
               <S.RightPanelTitle>Leader</S.RightPanelTitle>
-              <S.RightPanelText>The Grand Coordinator C.A</S.RightPanelText>
+              <S.RightPanelText>{data.leader}</S.RightPanelText>
             </S.RightPanelRow>
             <S.RightPanelRow>
               <S.RightPanelTitle>Main Headquarters</S.RightPanelTitle>
-              <S.RightPanelText>Nexus Station</S.RightPanelText>
+              <S.RightPanelText>{data.mainHeadquarters}</S.RightPanelText>
             </S.RightPanelRow>
             <S.RightPanelRow>
               <S.RightPanelTitle>Economy</S.RightPanelTitle>
-              <S.RightPanelText>Resource Based</S.RightPanelText>
+              <S.RightPanelText>{data.economy}</S.RightPanelText>
             </S.RightPanelRow>
             <S.RightPanelRow>
               <S.RightPanelTitle>Distance from The Planet </S.RightPanelTitle>
-              <S.RightPanelText>40,000 LY (Andromeda)</S.RightPanelText>
+              <S.RightPanelText>{data.distanceFromPlanet}</S.RightPanelText>
             </S.RightPanelRow>
           </S.RightPanel>
         </AnimatePresence>

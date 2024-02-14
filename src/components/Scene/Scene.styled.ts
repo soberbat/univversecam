@@ -1,9 +1,12 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
+import { Dot } from "../FactionSearch/FactionSearch.styles";
 
 export const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  background-color: rgba(3, 15, 35);
 
   button {
     position: absolute;
@@ -19,7 +22,7 @@ export const Container = styled.div`
   }
 `;
 
-export const SceneContainer = styled.div`
+export const SceneContainer = styled(motion.div)`
   width: 100%;
   height: 100%;
 `;

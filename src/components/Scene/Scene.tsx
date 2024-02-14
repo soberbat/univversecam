@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Container, SceneContainer } from "./Scene.styled";
 import { AnimatePresence } from "framer-motion";
 import { Scene } from "./class/Scene";
@@ -7,11 +13,15 @@ import Header from "../Header/Header";
 import AppContext from "../../state/AppContext";
 import PlanetDetail from "../PlanetDetail/PlanetDetail";
 import FactionSearch from "../FactionSearch/FactionSearch";
+import LoadingPage from "../LoadingPage/LoadingPage";
 const Environment = () => {
-  const { sceneRef, isFactionSearchVisible } = useContext(AppContext);
   const rendererWrapper = useRef<HTMLDivElement | null>(null);
   const [planetFocus, setPlanetFocus] = useState<undefined | string>(undefined);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [canUseApp, setCanUseApp] = useState(false);
   const isFocusedOnPlanet = planetFocus !== undefined;
+  const { sceneRef, isFactionSearchVisible, searchedFaction } =
+    useContext(AppContext);
 
   useEffect(() => {
     !sceneRef!.current &&
@@ -21,15 +31,18 @@ const Environment = () => {
           handlePlanetFocus,
         });
         await sceneRef!.current.init();
-        console.log("---- animate should start");
         sceneRef!.current.animate();
-        console.log("---- animate started");
+        setIsLoaded(true);
       })();
   }, []);
 
   const handlePlanetFocus = (focusedPlanet: string | undefined) => {
     setPlanetFocus(focusedPlanet);
   };
+
+  const onClick = useCallback(() => {
+    setCanUseApp(true);
+  }, []);
 
   return (
     <Container>
@@ -38,8 +51,15 @@ const Environment = () => {
       <Footer />
       <AnimatePresence>
         {isFocusedOnPlanet && <PlanetDetail planetFocus={planetFocus} />}
-        {isFactionSearchVisible && <FactionSearch />}
-        {/* <FactionSearch /> */}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isFactionSearchVisible && (
+          <FactionSearch searchedFaction={searchedFaction} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {!canUseApp && <LoadingPage isLoaded={isLoaded} onClick={onClick} />}
       </AnimatePresence>
     </Container>
   );

@@ -4,14 +4,13 @@ import {
   setCamera,
   setFactionVisibility,
   setIsFactionSearchVisible,
+  setSearchedFaction,
   setSensorVisibility,
 } from "../types/appTypes";
 
 export interface IState {
   sceneRef: React.MutableRefObject<Scene> | null;
   isFactionSearchVisible: boolean;
-  setIsFactionSearchVisible: setIsFactionSearchVisible;
-  setSensorVisibility: setSensorVisibility;
   sensorVisibility: {
     population: boolean;
     threat: boolean;
@@ -29,8 +28,12 @@ export interface IState {
     ka: boolean;
     px23t: boolean;
   };
+  searchedFaction: string;
   setFactionVisibility: setFactionVisibility;
+  setSearchedFaction: setSearchedFaction;
   setCamera: setCamera;
+  setIsFactionSearchVisible: setIsFactionSearchVisible;
+  setSensorVisibility: setSensorVisibility;
 }
 
 const defaultState: IState = {
@@ -53,8 +56,10 @@ const defaultState: IState = {
     "3D": true,
     "2D": false,
   },
+  searchedFaction: "",
   setSensorVisibility: () => {},
   setCamera: () => {},
+  setSearchedFaction: () => {},
   setFactionVisibility: () => {},
   setIsFactionSearchVisible: () => {},
 };

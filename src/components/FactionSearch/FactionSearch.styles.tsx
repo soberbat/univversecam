@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 import PlanetDetailRow from "../PlanetDetailRow/PlanetDetailRow";
 import { mediaLarge } from "../../utils/media";
+import { opacityVariant } from "./variants";
 
 interface ISlideCount {
   slide: number;
@@ -10,6 +11,7 @@ interface ISlideCount {
 export const Container = styled(motion.div).attrs({
   animate: { filter: "blur(0px)", opacity: 1 },
   initial: { filter: "blur(10px)", opacity: 0 },
+  exit: { filter: "blur(10px)", opacity: 0 },
 })`
   position: fixed;
   top: 50%;
@@ -66,12 +68,12 @@ export const InnerContainer = styled.div`
   `)}
 `;
 
-export const LeftPanel = styled.div`
+export const LeftPanel = styled(motion.div)`
   border-right: 1px solid ${({ theme }) => theme.fadedBlueSecondary};
   flex: 0.7;
 `;
 
-export const SliderWrapper = styled(motion.div)`
+export const SliderWrapper = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -95,7 +97,7 @@ export const SliderNavgiation = styled.div`
   background-size: 90%;
 `;
 
-export const Slide = styled.div<ISlideCount>(
+export const Slide = styled(motion.div)<ISlideCount>(
   ({ slide }) => css`
     width: ${`${100 / slide}%`};
     height: 100%;
@@ -112,9 +114,9 @@ export const Slide = styled.div<ISlideCount>(
   `
 );
 
-export const HeaderWrap = styled.div``;
+export const HeaderWrap = styled(motion.div)``;
 
-export const FactionName = styled.h4`
+export const FactionName = styled(motion.h4)`
   color: ${({ theme }) => theme.glowyBlue};
   margin: 0;
 `;
@@ -128,6 +130,7 @@ export const Line = styled.div`
 export const FactionGroupName = styled.h5`
   color: ${({ theme }) => theme.fadedBlue};
   margin: 0;
+  text-transform: capitalize;
 `;
 
 export const Description = styled.p`
@@ -136,26 +139,12 @@ export const Description = styled.p`
   width: 95%;
 `;
 
-export const GasAmount = styled.span`
+export const GasAmount = styled(motion.span)`
   font-weight: 700;
   color: ${({ theme }) => theme.fadedBlue};
 `;
 
-export const RightPanel = styled(motion.div).attrs({
-  animate: {
-    opacity: 1,
-  },
-  initial: {
-    opacity: 0,
-  },
-  exit: {
-    opacity: 0,
-  },
-  transition: {
-    ease: "circInOut",
-    duration: 0.3,
-  },
-})`
+export const RightPanel = styled(motion.div)`
   flex: 0.3;
   position: relative;
   z-index: -1;
@@ -188,12 +177,17 @@ export const Dot = styled(motion.span).attrs({
 })`
   position: absolute;
   display: block;
-  top: 2%;
-  right: 1%;
+  top: 1%;
+  right: 1.5%;
   border-radius: 100%;
   width: 3px;
   height: 3px;
   background-color: ${({ theme }) => theme.glowyBlue};
+
+  ${mediaLarge(css`
+    top: 2%;
+    right: 1%;
+  `)}
 `;
 
 export const SliderInnerWrapper = styled(motion.div).attrs({

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import {
   SkewedSearch,
   SkewedSearchInner,
@@ -7,15 +7,19 @@ import {
   InputFieldWrap,
   Caret,
 } from "./Select.styles";
+import AppContext from "../../state/AppContext";
 import ExpandedSelectionView from "../ExpandedSelectionView/ExpandedSelectionView";
 
 const Select: FC = () => {
+  const { setSearchedFaction } = useContext(AppContext);
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedFaction, setSelectedFaction] = useState("Choose A Faction");
 
   const handleClick = () => setIsExpanded(!isExpanded);
   const onSelect = (faction: string) => {
-    setIsExpanded(false), setSelectedFaction(faction);
+    setIsExpanded(false);
+    setSelectedFaction(faction);
+    setSearchedFaction(faction);
   };
 
   return (

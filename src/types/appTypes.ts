@@ -17,6 +17,8 @@ export type setIsFactionSearchVisible = React.Dispatch<
   React.SetStateAction<boolean>
 >;
 
+export type setSearchedFaction = React.Dispatch<React.SetStateAction<string>>;
+
 export type setFactionVisibility = React.Dispatch<
   React.SetStateAction<{
     banu: boolean;
@@ -42,3 +44,12 @@ export type FactionType =
   | "namstx"
   | "ka"
   | "px23t";
+
+export type FactionSearchData = {
+  descriptions: string[];
+  factionName: string;
+  leader: string;
+  economy: string;
+  mainHeadquarters: string;
+  distanceFromPlanet: string;
+};

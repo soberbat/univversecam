@@ -10,16 +10,19 @@ import AppContext from "../../state/AppContext";
 import Select from "../Select/Select";
 
 export default function RoutesSection() {
-  const { setIsFactionSearchVisible } = useContext(AppContext);
+  const { setIsFactionSearchVisible, isFactionSearchVisible } =
+    useContext(AppContext);
 
   const onClick = () => {
-    setIsFactionSearchVisible(true);
+    setIsFactionSearchVisible((prev) => !prev);
   };
 
   return (
     <RoutesWrapper>
       <SkewedSearch onClick={onClick} isActive={false} disabled={false}>
-        <SkewedSearchInner> Inspect </SkewedSearchInner>
+        <SkewedSearchInner>
+          {!isFactionSearchVisible ? "Inspect" : "X"}
+        </SkewedSearchInner>
       </SkewedSearch>
 
       <SearchBarsWrapper>

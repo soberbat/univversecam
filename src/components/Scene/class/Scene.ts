@@ -115,30 +115,23 @@ export class Scene {
 
     const planetLoadMap = planets.map((planet, i) => {
       return new Promise((resolve, reject) => {
-        loader.load(
-          `/assets/planets/${planet}.glb`,
-          (scene) => {
-            const planetGroup = this.world.clone();
-            planetGroup.userData.planetName = planet;
-            planetGroup.position.set(0, 0, 0);
+        loader.load(`/assets/planets/${planet}.glb`, (scene) => {
+          const planetGroup = this.world.clone();
+          planetGroup.userData.planetName = planet;
+          planetGroup.position.set(0, 0, 0);
 
-            (planetGroup as any).isPlanet = true;
+          (planetGroup as any).isPlanet = true;
 
-            scene.scene.traverse((item) => {
-              item.scale.set(1, 1, 1);
-              item.position.set(0, 0, 0);
-            });
+          scene.scene.traverse((item) => {
+            item.scale.set(1, 1, 1);
+            item.position.set(0, 0, 0);
+          });
 
-            planetGroup.add(scene.scene);
-            this.planets.push(planetGroup);
-            this.scene.add(planetGroup);
-            resolve(scene.scene);
-          }
-          // ,
-          // (progress) => {
-          //   console.log(progress);
-          // }
-        );
+          planetGroup.add(scene.scene);
+          this.planets.push(planetGroup);
+          this.scene.add(planetGroup);
+          resolve(scene.scene);
+        });
       });
     });
 

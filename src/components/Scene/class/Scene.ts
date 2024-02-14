@@ -91,9 +91,9 @@ export class Scene {
   };
 
   init = async () => {
-    this.loadModels();
+    await this.loadModels();
     this.initLights();
-    this.initSprites();
+    await this.initSprites();
     this.addStars();
     this.rendererContainer.addEventListener("mousedown", this.handleRaycasting);
   };
@@ -145,11 +145,13 @@ export class Scene {
     this.scene.add(ambientLight, directionalLight, hemisphereLight);
   };
 
-  initSprites = () => {
-    const factionsWithSpriteMap = factionData.map(({ name, color }) => ({
-      spriteMap: this.loadSpriteMaterial(name),
-      color,
-    }));
+  initSprites = async () => {
+    const factionsWithSpriteMap = await Promise.all(
+      factionData.map(async ({ name, color }) => ({
+        spriteMap: await this.loadSpriteMaterial(name),
+        color,
+      }))
+    );
 
     factionsWithSpriteMap.forEach(({ spriteMap, color }) => {
       this.factions.push({
@@ -266,8 +268,16 @@ export class Scene {
     this.scene.add(stars);
   };
 
-  loadSpriteMaterial = (name: string) => {
-    return new THREE.TextureLoader().load(`/assets/factions/${name}.png`);
+  loadSpriteMaterial = async (name: string) => {
+    const textureLoaderLoader = new THREE.TextureLoader();
+
+    const texture = await new Promise<THREE.Texture>((resolve, reject) => {
+      textureLoaderLoader.load(`/assets/factions/${name}.png`, (texture) => {
+        resolve(texture);
+      });
+    });
+
+    return texture;
   };
 
   traverseThroughIntersection = (intersect: THREE.Object3D<THREE.Event>) => {

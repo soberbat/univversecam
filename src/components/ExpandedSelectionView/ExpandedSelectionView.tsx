@@ -7,7 +7,11 @@ import {
   FactionLogo,
 } from "./ExpandedSelectionView.styles";
 
-const ExpandedSelectionView = ({ onSelect }) => {
+interface IExpandedSelectionView {
+  onSelect: (description: string) => void;
+}
+
+const ExpandedSelectionView = ({ onSelect }: IExpandedSelectionView) => {
   return (
     <Wrapper>
       <InnerWrapper>

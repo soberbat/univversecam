@@ -44,7 +44,7 @@ export class Scene {
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     this.scene = new THREE.Scene();
-    this.scene.background = "0x000000";
+    this.scene.background = "0x000000" as unknown as THREE.Color;
 
     this.cameraGroup = new THREE.Group();
     this.ratio = window.innerWidth / window.innerHeight;
@@ -281,7 +281,7 @@ export class Scene {
     let traversed: THREE.Object3D<THREE.Event> | undefined = undefined;
 
     intersect.traverseAncestors((obj) => {
-      if (obj.isPlanet === true) {
+      if ((obj as any).isPlanet === true) {
         traversed = obj;
         this.isSelected = true;
         return;

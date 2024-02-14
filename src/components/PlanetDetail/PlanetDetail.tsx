@@ -9,7 +9,11 @@ import {
 } from "./PlanetDetail.styles";
 import PlanetDetailRow from "../PlanetDetailRow/PlanetDetailRow";
 
-const PlanetDetail = ({ planetFocus }) => {
+interface IPlanetDetail {
+  planetFocus: string;
+}
+
+const PlanetDetail = ({ planetFocus }: IPlanetDetail) => {
   return (
     <Container>
       <InnerContainer>
